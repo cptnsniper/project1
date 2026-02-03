@@ -3,22 +3,166 @@
     {
       "id": 1,
       "name": "Bahen 1F",
-      "brief_description": "You are on the first floor of the Bahen Center. There are elevators to the West, and an exit from the building to St. George street to the East. You see something shiny on the ground -- looks like a toonie?",
-      "long_description": "You are on the first floor of the Bahen Center. It's usually crowded at this time of the day, but today it's eerily quiet. Only a few students are studying at the table near the doors. You better not disturb them. One student is rushing down the corridor, wearing a heavy-looking backpack and carrying a textbook in their arms. There are elevators to the West, and an exit from the building to St. George street to the East.",
+      "brief_description": "You are on the first floor of the Bahen Center. There are elevators to the West, and an exit from the building to St. George street to the East. You see something shiny on the ground.",
+      "long_description": "You are on the first floor of the Bahen Center. It's usually crowded at this time of the day, but today it's eerily quiet. Only a few students are studying at the table near the doors. One student is rushing down the corridor, wearing a heavy-looking backpack and carrying a textbook in their arms. There are elevators to the West, and an exit from the building to St. George street to the East.",
       "available_commands": {
         "go south": 4,
-        "go east": 2
+        "go east": 2,
+        "go west": 3
       },
       "items": ["toonie"]
+    },
+    {
+      "id": 2,
+      "name": "St. George Street",
+      "brief_description": "You are outside on St. George Street. The campus is bustling with activity. You can go back into Bahen to the West, or continue North up the street.",
+      "long_description": "You are outside on St. George Street on the University of Toronto campus. The street is lined with trees and buildings. Students are walking in various directions. You can see the Hart House to the North and can return to Bahen Center to the West.",
+      "available_commands": {
+        "go west": 1,
+        "go north": 5
+      },
+      "items": ["student_card"]
+    },
+    {
+      "id": 3,
+      "name": "Bahen Elevator Lobby",
+      "brief_description": "You are in the elevator lobby. There are several elevators in front of you. You can go back East to the main floor.",
+      "long_description": "You are in the elevator lobby of Bahen Center. The elevators are modern and sleek. Above each elevator is a digital display showing which floor it's on. You can go back East to the main floor, or take an elevator up to the second floor.",
+      "available_commands": {
+        "go east": 1,
+        "go up": 6
+      },
+      "items": ["lost_keys"]
+    },
+    {
+      "id": 4,
+      "name": "Bahen South Exit",
+      "brief_description": "You are at the South exit of Bahen Center. A hallway extends North back to the main floor.",
+      "long_description": "You are at the South exit of Bahen Center. The area is dimly lit. You can see a vending machine against the wall. The hallway extends North back to the main floor.",
+      "available_commands": {
+        "go north": 1
+      },
+      "items": ["energy_drink"]
+    },
+    {
+      "id": 5,
+      "name": "Hart House",
+      "brief_description": "You are at Hart House, a historic building on campus. You can go South back to St. George Street, or enter the building to the East.",
+      "long_description": "You are standing outside Hart House, one of the oldest and most iconic buildings on the University of Toronto campus. The Gothic Revival architecture is impressive. You can see the main entrance to the East and can return to St. George Street to the South.",
+      "available_commands": {
+        "go south": 2,
+        "go east": 7
+      },
+      "items": ["vintage_coin"]
+    },
+    {
+      "id": 6,
+      "name": "Bahen 2F",
+      "brief_description": "You are on the second floor of Bahen Center. There are classrooms and offices. You can take the elevator back down.",
+      "long_description": "You are on the second floor of Bahen Center. The hallway is lined with classroom doors and professor's offices. You can hear muffled conversations coming from some of the rooms. There's a study lounge at the end of the hall. You can take the elevator back down to the first floor.",
+      "available_commands": {
+        "go down": 3,
+        "go east": 8
+      },
+      "items": ["textbook"]
+    },
+    {
+      "id": 7,
+      "name": "Hart House Interior",
+      "brief_description": "You are inside Hart House. A grand staircase dominates the room. You can go back outside to the West.",
+      "long_description": "You are inside Hart House. The interior is stunning with high ceilings and ornate decorations. A grand staircase curves upward. You can see portraits of notable alumni on the walls. You can go back outside to the West or up the stairs to the second floor.",
+      "available_commands": {
+        "go west": 5,
+        "go up": 9
+      },
+      "items": []
+    },
+    {
+      "id": 8,
+      "name": "Bahen Study Lounge",
+      "brief_description": "You are in the study lounge. There are comfortable chairs and tables. You can go back West to the main hallway.",
+      "long_description": "You are in a cozy study lounge on the second floor of Bahen Center. Comfortable chairs and tables are scattered throughout. A few students are quietly studying. There's a bulletin board with various announcements. You can go back West to the main hallway.",
+      "available_commands": {
+        "go west": 6
+      },
+      "items": ["coffee_mug"]
+    },
+    {
+      "id": 9,
+      "name": "Hart House Upper Floor",
+      "brief_description": "You are on the upper floor of Hart House. You can see a beautiful library through one of the doors. You can go back down the stairs.",
+      "long_description": "You are on the upper floor of Hart House. Through an open doorway, you can see a beautiful library with shelves of books. Large windows let in natural light. The atmosphere is peaceful and scholarly. You can go back down the stairs or enter the library to the East.",
+      "available_commands": {
+        "go down": 7,
+        "go east": 10
+      },
+      "items": ["bookmark"]
+    },
+    {
+      "id": 10,
+      "name": "Hart House Library",
+      "brief_description": "You are in the Hart House library. Shelves of books surround you. You can go back West to the hallway.",
+      "long_description": "You are in the Hart House library. The room is lined with bookshelves from floor to ceiling. The smell of old books fills the air. A large oak desk sits near the window. You can go back West to the hallway.",
+      "available_commands": {
+        "go west": 9
+      },
+      "items": ["rare_book"]
     }
   ],
   "items": [
     {
+      "id": 1,
       "name": "toonie",
       "description": "There is a toonie on the ground. Someone must have dropped it.",
-      "start_position": 1,
-      "target_position": 4,
-      "target_points": 5
+      "can_take": true
+    },
+    {
+      "id": 2,
+      "name": "student_card",
+      "description": "A student ID card. It belongs to someone named Alex.",
+      "can_take": true
+    },
+    {
+      "id": 3,
+      "name": "lost_keys",
+      "description": "A set of keys with a blue keychain. The owner's initials are 'J.M.'",
+      "can_take": true
+    },
+    {
+      "id": 4,
+      "name": "energy_drink",
+      "description": "An energy drink from the vending machine. It looks refreshing.",
+      "can_take": true
+    },
+    {
+      "id": 5,
+      "name": "vintage_coin",
+      "description": "An old coin with historical markings. It might be valuable.",
+      "can_take": true
+    },
+    {
+      "id": 6,
+      "name": "textbook",
+      "description": "A heavy computer science textbook. It looks important.",
+      "can_take": true
+    },
+    {
+      "id": 7,
+      "name": "coffee_mug",
+      "description": "A ceramic mug with 'UofT' printed on it. Still warm to the touch.",
+      "can_take": true
+    },
+    {
+      "id": 8,
+      "name": "bookmark",
+      "description": "An ornate bookmark made of silk. It has gold embroidery.",
+      "can_take": true
+    },
+    {
+      "id": 9,
+      "name": "rare_book",
+      "description": "An ancient-looking book with a leather cover. The title is faded but still visible.",
+      "can_take": false
     }
   ]
 }
