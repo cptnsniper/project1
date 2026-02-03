@@ -36,10 +36,13 @@ class AdventureGame:
     Instance Attributes:
         - current_location_id: the ID of the current location of the player in the game
         - ongoing: whether the game is ongoing (True) or has ended (False)
+        - inventory: list of Item objects the player is carrying
+        - score: the player's current score
 
     Representation Invariants:
         - self.current_location_id in self._locations
         - self.ongoing is True or False
+        - self.score >= 0
     """
 
     # Private Instance Attributes (do NOT remove these two attributes):
@@ -49,8 +52,10 @@ class AdventureGame:
 
     _locations: dict[int, Location]
     _items: list[Item]
-    current_location_id: int  # Suggested attribute, can be removed
-    ongoing: bool  # Suggested attribute, can be removed
+    current_location_id: int
+    ongoing: bool
+    inventory: list[Item]
+    score: int
 
     def __init__(self, game_data_file: str, initial_location_id: int) -> None:
         """
@@ -75,6 +80,8 @@ class AdventureGame:
         # Suggested attributes (you can remove and track these differently if you wish to do so):
         self.current_location_id = initial_location_id  # game begins at this location
         self.ongoing = True  # whether the game is ongoing
+        self.inventory = []  # items the player is carrying
+        self.score = 0  # player's score
 
     @staticmethod
     def _load_game_data(filename: str) -> tuple[dict[int, Location], list[Item]]:
@@ -107,6 +114,24 @@ class AdventureGame:
             loc_id = self.current_location_id
         return self._locations[loc_id]
 
+    def add_item_to_inventory(self, item: Item) -> None:
+        """Add an item to the player's inventory."""
+        self.inventory.append(item)
+
+    def display_inventory(self) -> None:
+        """Display the player's current inventory."""
+        if not self.inventory:
+            print("Your inventory is empty.")
+        else:
+            print("You are carrying:")
+            for item in self.inventory:
+                print(f"  - {item.name}: {item.description}")
+
+    def increase_score(self, points: int) -> None:
+        """Increase the player's score by the given number of points."""
+        self.score += points
+        print(f"Score increased by {points}! Total score: {self.score}")
+
 
 if __name__ == "__main__":
     # When you are ready to check your work with python_ta, uncomment the following lines.
@@ -120,7 +145,7 @@ if __name__ == "__main__":
 
     game_log = EventList()  # This is REQUIRED as one of the baseline requirements
     game = AdventureGame('game_data.json', 1)  # load data, setting initial location ID to 1
-    menu = ["look", "inventory", "score", "log", "quit"]  # Regular menu options available at each location
+    menu = ["look", "inventory", "score", "log", "quit", "help"]  # Regular menu options available at each location
     choice = ""
 
     # Note: You may modify the code below as needed; the following starter code is just a suggestion
@@ -144,7 +169,7 @@ if __name__ == "__main__":
             print(location.brief_description)
 
         # Display possible actions at this location
-        print("What to do? Choose from: look, inventory, score, log, quit")
+        print("What to do? Choose from: look, inventory, score, log, quit, help")
         print("At this location, you can also:")
         for action in location.available_commands:
             print("-", action)
@@ -159,16 +184,23 @@ if __name__ == "__main__":
         print("You decided to:", choice)
 
         if choice in menu:
-            # TODO: Handle each menu command as appropriate
             if choice == "log":
                 game_log.display_events()
             # ENTER YOUR CODE BELOW to handle other menu commands (remember to use helper functions as appropriate)
             elif choice == "inventory":
-                print("You check your inventory. (Functionality to be implemented)")
+                game.display_inventory()
             elif choice == "score":
-                print("You check your score. (Functionality to be implemented)")
+                print(f"Your current score: {game.score}")
             elif choice == "look":
                 print(location.long_description)
+            elif choice == "help":
+                print("Available commands:")
+                print("  look - View the full description of the current location")
+                print("  inventory - Check what items you are carrying")
+                print("  score - Check your current score")
+                print("  log - View all events that have occurred")
+                print("  quit - Exit the game")
+                print("  help - Display this help message")
             elif choice == "quit":
                 print("Thank you for playing! Goodbye.")
                 game.ongoing = False
@@ -176,8 +208,22 @@ if __name__ == "__main__":
         else:
             # Handle non-menu actions
             result = location.available_commands[choice]
-            game.current_location_id = result
-
-            # TODO: Add in code to deal with actions which do not change the location (e.g. taking or using an item)
-            # TODO: Add in code to deal with special locations (e.g. puzzles) as needed for your game
-            print(f"You move to location {game.current_location_id}.")
+            
+            # Check if the result is an integer (location change) or a string (item interaction)
+            if isinstance(result, int):
+                game.current_location_id = result
+                print(f"You move to location {game.current_location_id}.")
+            else:
+                # Handle item interactions (e.g., taking or using an item)
+                if choice.startswith("take"):
+                    item_name = choice.replace("take ", "").strip()
+                    if item_name in location.items:
+                        print(f"You picked up the {item_name}.")
+                        location.items.remove(item_name)
+                    else:
+                        print(f"You cannot take {item_name}.")
+                elif choice.startswith("use"):
+                    item_name = choice.replace("use ", "").strip()
+                    print(f"You used the {item_name}.")
+                else:
+                    print(f"You performed the action: {choice}")

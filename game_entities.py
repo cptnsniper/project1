@@ -26,17 +26,20 @@ class Location:
     """A location in our text adventure game world.
 
     Instance Attributes:
-        - # TODO Describe each instance attribute here
+        - id_num: unique identifier for this location
+        - brief_description: a brief description of the location
+        - long_description: a detailed description of the location
+        - available_commands: a dictionary of commands available at this location
+        - items: a list of items available at this location
+        - visited: whether the player has visited this location
 
     Representation Invariants:
-        - # TODO Describe any necessary representation invariants
+        - id_num is a unique integer identifier
+        - brief_description and long_description are non-empty strings
+        - available_commands is a dictionary of valid commands
+        - items is a list of strings
+        - visited is True or False
     """
-
-    # This is just a suggested starter class for Location.
-    # You may change/add parameters and the data available for each Location object as you see fit.
-    #
-    # The only thing you must NOT change is the name of this class: Location.
-    # All locations in your game MUST be represented as an instance of this class.
 
     id_num: int
     brief_description: str
@@ -51,24 +54,21 @@ class Item:
     """An item in our text adventure game world.
 
     Instance Attributes:
-        - # TODO Describe each instance attribute here
+        - id: unique identifier for this item
+        - name: the name of the item
+        - description: a description of what the item is
+        - can_take: whether the player is allowed to take this item
 
     Representation Invariants:
-        - # TODO Describe any necessary representation invariants
+        - id is a unique string identifier
+        - name is a non-empty string
+        - can_take is True or False
     """
 
-    # NOTES:
-    # This is just a suggested starter class for Item.
-    # You may change these parameters and the data available for each Item object as you see fit.
-    # (The current parameters correspond to the example in the handout).
-    #
-    # The only thing you must NOT change is the name of this class: Item.
-    # All item objects in your game MUST be represented as an instance of this class.
-
+    id: str
     name: str
-    start_position: int
-    target_position: int
-    target_points: int
+    description: str
+    can_take: bool
 
 
 # Note: Other entities you may want to add, depending on your game plan:
