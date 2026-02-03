@@ -34,10 +34,12 @@ class AdventureGame:
     """A text adventure game class storing all location, item and map data.
 
     Instance Attributes:
-        - # TODO add descriptions of public instance attributes as needed
+        - current_location_id: the ID of the current location of the player in the game
+        - ongoing: whether the game is ongoing (True) or has ended (False)
 
     Representation Invariants:
-        - # TODO add any appropriate representation invariants as needed
+        - self.current_location_id in self._locations
+        - self.ongoing is True or False
     """
 
     # Private Instance Attributes (do NOT remove these two attributes):
@@ -90,8 +92,10 @@ class AdventureGame:
             locations[loc_data['id']] = location_obj
 
         items = []
-        # TODO: Add Item objects to the items list; your code should be structured similarly to the loop above
-        # YOUR CODE BELOW
+
+        for item_data in data['items']:
+            item_obj = Item(item_data['id'], item_data['name'], item_data['description'], item_data['can_take'])
+            items.append(item_obj)
 
         return locations, items
 
@@ -99,20 +103,20 @@ class AdventureGame:
         """Return Location object associated with the provided location ID.
         If no ID is provided, return the Location object associated with the current location.
         """
-
-        # TODO: Complete this method as specified
-        # YOUR CODE BELOW
+        if loc_id is None:
+            loc_id = self.current_location_id
+        return self._locations[loc_id]
 
 
 if __name__ == "__main__":
     # When you are ready to check your work with python_ta, uncomment the following lines.
     # (Delete the "#" and space before each line.)
     # IMPORTANT: keep this code indented inside the "if __name__ == '__main__'" block
-    # import python_ta
-    # python_ta.check_all(config={
-    #     'max-line-length': 120,
-    #     'disable': ['R1705', 'E9998', 'E9999', 'static_type_checker']
-    # })
+    import python_ta
+    python_ta.check_all(config={
+        'max-line-length': 120,
+        'disable': ['R1705', 'E9998', 'E9999', 'static_type_checker']
+    })
 
     game_log = EventList()  # This is REQUIRED as one of the baseline requirements
     game = AdventureGame('game_data.json', 1)  # load data, setting initial location ID to 1
@@ -126,13 +130,18 @@ if __name__ == "__main__":
 
         location = game.get_location()
 
-        # TODO: Add new Event to game log to represent current game location
         #  Note that the <choice> variable should be the command which led to this event
         # YOUR CODE HERE
+        event = Event(location.id, choice)
+        game_log.add_event(event)
 
-        # TODO: Depending on whether or not it's been visited before,
         #  print either full description (first time visit) or brief description (every subsequent visit) of location
         # YOUR CODE HERE
+        if not location.visited:
+            print(location.long_description)
+            location.visited = True
+        else:
+            print(location.brief_description)
 
         # Display possible actions at this location
         print("What to do? Choose from: look, inventory, score, log, quit")
@@ -154,6 +163,15 @@ if __name__ == "__main__":
             if choice == "log":
                 game_log.display_events()
             # ENTER YOUR CODE BELOW to handle other menu commands (remember to use helper functions as appropriate)
+            elif choice == "inventory":
+                print("You check your inventory. (Functionality to be implemented)")
+            elif choice == "score":
+                print("You check your score. (Functionality to be implemented)")
+            elif choice == "look":
+                print(location.long_description)
+            elif choice == "quit":
+                print("Thank you for playing! Goodbye.")
+                game.ongoing = False
 
         else:
             # Handle non-menu actions
@@ -162,3 +180,4 @@ if __name__ == "__main__":
 
             # TODO: Add in code to deal with actions which do not change the location (e.g. taking or using an item)
             # TODO: Add in code to deal with special locations (e.g. puzzles) as needed for your game
+            print(f"You move to location {game.current_location_id}.")
