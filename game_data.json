@@ -2,167 +2,187 @@
   "locations": [
     {
       "id": 1,
-      "name": "Bahen 1F",
-      "brief_description": "You are on the first floor of the Bahen Center. There are elevators to the West, and an exit from the building to St. George street to the East. You see something shiny on the ground.",
-      "long_description": "You are on the first floor of the Bahen Center. It's usually crowded at this time of the day, but today it's eerily quiet. Only a few students are studying at the table near the doors. One student is rushing down the corridor, wearing a heavy-looking backpack and carrying a textbook in their arms. There are elevators to the West, and an exit from the building to St. George street to the East.",
+      "name": "Main Deck",
+      "brief_description": "You are on the main deck of a large cargo ship. The deck is eerily quiet. Ropes and cargo containers are scattered around. You can go below deck to the South, to the bridge North, or to the port side West.",
+      "long_description": "You wake up on the main deck of a large cargo ship with no memory of how you got here. The sun is setting, casting long shadows across the weathered wooden planks. The ship rocks gently on the waves. There's an unsettling silence—no crew members anywhere. You notice claw marks gouged into the metal railings. Dark stains stain the deck near the cargo containers. You can go below deck to the South, climb to the bridge North, or explore the port side West.",
       "available_commands": {
-        "go south": 4,
-        "go east": 2,
-        "go west": 3
+        "go south": 2,
+        "go north": 3,
+        "go west": 4
       },
-      "items": ["toonie"]
+      "items": ["captain_log"]
     },
     {
       "id": 2,
-      "name": "St. George Street",
-      "brief_description": "You are outside on St. George Street. The campus is bustling with activity. You can go back into Bahen to the West, or continue North up the street.",
-      "long_description": "You are outside on St. George Street on the University of Toronto campus. The street is lined with trees and buildings. Students are walking in various directions. You can see the Hart House to the North and can return to Bahen Center to the West.",
+      "name": "Cargo Hold",
+      "brief_description": "You are in the dark cargo hold below deck. Large metal containers are stacked high. You can return to the main deck North, or explore deeper into the hold East.",
+      "long_description": "You descend into the cargo hold. It's dimly lit by a few flickering emergency lights. The air is thick and humid. Massive metal shipping containers are stacked precariously. Several containers have been torn open, their contents scattered across the floor. You see more massive claw marks on the container walls—whatever caused them was enormous. You can return to the main deck North or explore deeper East.",
       "available_commands": {
-        "go west": 1,
-        "go north": 5
+        "go north": 1,
+        "go east": 5
       },
-      "items": ["student_card"]
+      "items": ["crew_manifest"]
     },
     {
       "id": 3,
-      "name": "Bahen Elevator Lobby",
-      "brief_description": "You are in the elevator lobby. There are several elevators in front of you. You can go back East to the main floor.",
-      "long_description": "You are in the elevator lobby of Bahen Center. The elevators are modern and sleek. Above each elevator is a digital display showing which floor it's on. You can go back East to the main floor, or take an elevator up to the second floor.",
+      "name": "Bridge",
+      "brief_description": "You are on the ship's bridge. Navigation equipment and controls are everywhere. The captain's chair sits empty. You can descend back to the main deck South or enter the Captain's Cabin to the East.",
+      "long_description": "You climb to the bridge of the ship. Navigation screens flicker with warnings. Charts are scattered across the control panels. The captain's leather chair sits abandoned. Through the window, you can see the ocean stretching endlessly. The radio is emitting static. You notice deep gouges in the metal walls here too. To the East is the Captain's Cabin—your way to send a distress signal. You can descend back to the main deck South.",
       "available_commands": {
-        "go east": 1,
-        "go up": 6
+        "go south": 1,
+        "go east": 6
       },
-      "items": ["lost_keys"]
+      "items": ["radio_key"]
     },
     {
       "id": 4,
-      "name": "Bahen South Exit",
-      "brief_description": "You are at the South exit of Bahen Center. A hallway extends North back to the main floor.",
-      "long_description": "You are at the South exit of Bahen Center. The area is dimly lit. You can see a vending machine against the wall. The hallway extends North back to the main floor.",
+      "name": "Port Side",
+      "brief_description": "You are on the port side of the ship. The railings are damaged. You can see something glinting in the water below. You can return to the main deck East or climb up to the crow's nest North.",
+      "long_description": "You walk along the port side of the ship. The railings are twisted and broken in several places. Looking down, you can see the dark water below and something large moving beneath the surface. There are deep gouges in the hull as if something massive clawed at the ship. You can return to the main deck East or climb up to the crow's nest North using the ladder.",
       "available_commands": {
-        "go north": 1
+        "go east": 1,
+        "go north": 7
       },
-      "items": ["energy_drink"]
+      "items": ["torn_flag"]
     },
     {
       "id": 5,
-      "name": "Hart House",
-      "brief_description": "You are at Hart House, a historic building on campus. You can go South back to St. George Street, or enter the building to the East.",
-      "long_description": "You are standing outside Hart House, one of the oldest and most iconic buildings on the University of Toronto campus. The Gothic Revival architecture is impressive. You can see the main entrance to the East and can return to St. George Street to the South.",
+      "name": "Deep Hold",
+      "brief_description": "You are deep in the cargo hold. It's very dark. You can hear water dripping. You can return West to the main cargo hold.",
+      "long_description": "You venture deeper into the cargo hold. It's pitch black except for your ability to see. Water drips from above. The air smells of salt and something rotten. You see a massive hole in the hull—the ship is taking on water slowly. This must have been where the creature broke through. You can return West to the main cargo hold. A terrible feeling washes over you as you hear a distant, otherworldly sound echoing through the hold.",
       "available_commands": {
-        "go south": 2,
-        "go east": 7
+        "go west": 2,
+        "go up": 1
       },
-      "items": ["vintage_coin"]
+      "items": ["water_sample"]
     },
     {
       "id": 6,
-      "name": "Bahen 2F",
-      "brief_description": "You are on the second floor of Bahen Center. There are classrooms and offices. You can take the elevator back down.",
-      "long_description": "You are on the second floor of Bahen Center. The hallway is lined with classroom doors and professor's offices. You can hear muffled conversations coming from some of the rooms. There's a study lounge at the end of the hall. You can take the elevator back down to the first floor.",
+      "name": "Captain's Cabin",
+      "brief_description": "You are in the Captain's Cabin. A large desk dominates the room. Navigation charts cover the walls. You can return to the Bridge West.",
+      "long_description": "You enter the Captain's Cabin. It's well-furnished with nautical decorations. The captain's desk is covered with charts and a ship's log. A radio system sits on a side table—this is how you can call for help. You notice a recent entry in the log describing strange sonar readings. On the desk is a mysterious key. The walls here are also scarred with claw marks, but less severe than elsewhere. You can return to the Bridge West.",
       "available_commands": {
-        "go down": 3,
-        "go east": 8
+        "go west": 3,
+        "send signal": 11
       },
-      "items": ["textbook"]
+      "items": ["safe_key"]
     },
     {
       "id": 7,
-      "name": "Hart House Interior",
-      "brief_description": "You are inside Hart House. A grand staircase dominates the room. You can go back outside to the West.",
-      "long_description": "You are inside Hart House. The interior is stunning with high ceilings and ornate decorations. A grand staircase curves upward. You can see portraits of notable alumni on the walls. You can go back outside to the West or up the stairs to the second floor.",
+      "name": "Crow's Nest",
+      "brief_description": "You are high up in the crow's nest. You can see the entire ocean around you. You can climb back down South.",
+      "long_description": "You climb high into the crow's nest at the top of the ship's mast. From here, you can see for miles across the ocean in all directions. The view is magnificent but terrifying—you're completely exposed. In the distance, you see something massive moving through the water, creating waves as it travels. Its silhouette is enormous and vaguely serpentine. You realize what attacked the ship. The creature seems to be circling. You can climb back down South, but you feel watched from the water below.",
       "available_commands": {
-        "go west": 5,
-        "go up": 9
+        "go south": 4,
+        "descend quickly": 8
+      },
+      "items": ["spyglass"]
+    },
+    {
+      "id": 8,
+      "name": "Rigging Section",
+      "brief_description": "You are in the ship's rigging. Ropes and pulleys surround you. You can go down to the Port Side South or continue to the emergency raft West.",
+      "long_description": "You descend from the crow's nest into the rigging section. The ropes creak and sway in the wind. Suddenly, you feel the entire ship shudder violently. A massive shape rises from the water on the port side—the sea monster! Its tentacle-like appendages reach toward the ship. You must act quickly. You can try to reach the emergency raft West or descend to the Port Side South.",
+      "available_commands": {
+        "go south": 4,
+        "go west": 9
+      },
+      "items": ["rope"]
+    },
+    {
+      "id": 9,
+      "name": "Emergency Raft",
+      "brief_description": "You are at the emergency raft. It's partially lowered. You can attempt to escape West or return to the ship East.",
+      "long_description": "You reach the emergency raft attached to the side of the ship. It's small but functional. The raft is partially lowered, ready to deploy. The water below churns as the sea monster thrashes nearby. You have mere seconds. You can attempt to lower the raft and escape West into the ocean, or return to the ship East to try another route.",
+      "available_commands": {
+        "go west": 10,
+        "go east": 8
+      },
+      "items": ["flare_gun"]
+    },
+    {
+      "id": 10,
+      "name": "Open Ocean - Safe Escape",
+      "brief_description": "You are drifting safely in the emergency raft, away from the monster. Help is on the way.",
+      "long_description": "You successfully lower the raft and drift away from the doomed ship. The emergency beacon is transmitting your location. In the distance, you see the sea monster circling the ship, but it's no longer interested in your small raft. A rescue ship appears on the horizon. You're safe. As you wait for rescue, you reflect on the impossible creature you encountered. The truth about what attacked the ship will be a mystery for marine biologists to solve.",
+      "available_commands": {
+        "wait for rescue": 10
       },
       "items": []
     },
     {
-      "id": 8,
-      "name": "Bahen Study Lounge",
-      "brief_description": "You are in the study lounge. There are comfortable chairs and tables. You can go back West to the main hallway.",
-      "long_description": "You are in a cozy study lounge on the second floor of Bahen Center. Comfortable chairs and tables are scattered throughout. A few students are quietly studying. There's a bulletin board with various announcements. You can go back West to the main hallway.",
+      "id": 11,
+      "name": "Captain's Cabin - Signal Sent",
+      "brief_description": "You sent a distress signal! A rescue ship is on the way. You are safe in the Captain's Cabin.",
+      "long_description": "You successfully send a distress signal from the Captain's Cabin. The radio crackles to life as the nearest coast guard station acknowledges your message. They confirm a rescue ship is en route and will reach you in approximately 4 hours. You are safe. As you wait, you document everything you've learned about the attack. The captain's log entries, the physical evidence, and your observations will help scientists understand this unprecedented encounter with a sea monster.",
       "available_commands": {
-        "go west": 6
+        "wait for rescue": 11
       },
-      "items": ["coffee_mug"]
+      "items": []
     },
     {
-      "id": 9,
-      "name": "Hart House Upper Floor",
-      "brief_description": "You are on the upper floor of Hart House. You can see a beautiful library through one of the doors. You can go back down the stairs.",
-      "long_description": "You are on the upper floor of Hart House. Through an open doorway, you can see a beautiful library with shelves of books. Large windows let in natural light. The atmosphere is peaceful and scholarly. You can go back down the stairs or enter the library to the East.",
-      "available_commands": {
-        "go down": 7,
-        "go east": 10
-      },
-      "items": ["bookmark"]
-    },
-    {
-      "id": 10,
-      "name": "Hart House Library",
-      "brief_description": "You are in the Hart House library. Shelves of books surround you. You can go back West to the hallway.",
-      "long_description": "You are in the Hart House library. The room is lined with bookshelves from floor to ceiling. The smell of old books fills the air. A large oak desk sits near the window. You can go back West to the hallway.",
-      "available_commands": {
-        "go west": 9
-      },
-      "items": ["rare_book"]
+      "id": 12,
+      "name": "Monster Attack - Game Over",
+      "brief_description": "The creature catches you. Game Over.",
+      "long_description": "You didn't escape in time. The sea monster's massive tentacle wraps around you. This is the end. At least now, the mystery of the ship's fate is solved. Your body is never recovered, but the ship's wreckage eventually washes ashore, providing evidence of the creature's existence.",
+      "available_commands": {},
+      "items": []
     }
   ],
   "items": [
     {
       "id": 1,
-      "name": "toonie",
-      "description": "There is a toonie on the ground. Someone must have dropped it.",
+      "name": "captain_log",
+      "description": "The ship's captain's log. Recent entries mention strange sonar readings and unusual animal activity.",
       "can_take": true
     },
     {
       "id": 2,
-      "name": "student_card",
-      "description": "A student ID card. It belongs to someone named Alex.",
+      "name": "crew_manifest",
+      "description": "A manifest listing all crew members. All 47 crew members are accounted for... but where are they?",
       "can_take": true
     },
     {
       "id": 3,
-      "name": "lost_keys",
-      "description": "A set of keys with a blue keychain. The owner's initials are 'J.M.'",
+      "name": "radio_key",
+      "description": "A small brass key for activating the bridge's emergency radio system.",
       "can_take": true
     },
     {
       "id": 4,
-      "name": "energy_drink",
-      "description": "An energy drink from the vending machine. It looks refreshing.",
+      "name": "torn_flag",
+      "description": "The ship's flag, torn and tattered with what looks like claw marks through it.",
       "can_take": true
     },
     {
       "id": 5,
-      "name": "vintage_coin",
-      "description": "An old coin with historical markings. It might be valuable.",
+      "name": "water_sample",
+      "description": "A vial of murky water from the cargo hold. It has an unusual phosphorescent glow.",
       "can_take": true
     },
     {
       "id": 6,
-      "name": "textbook",
-      "description": "A heavy computer science textbook. It looks important.",
+      "name": "safe_key",
+      "description": "An ornate key found on the Captain's desk. It likely opens the captain's safe.",
       "can_take": true
     },
     {
       "id": 7,
-      "name": "coffee_mug",
-      "description": "A ceramic mug with 'UofT' printed on it. Still warm to the touch.",
+      "name": "spyglass",
+      "description": "A brass telescope used for spotting objects at sea. Through it, you saw the sea monster.",
       "can_take": true
     },
     {
       "id": 8,
-      "name": "bookmark",
-      "description": "An ornate bookmark made of silk. It has gold embroidery.",
+      "name": "rope",
+      "description": "A length of sturdy nautical rope. Could be useful for securing things or climbing.",
       "can_take": true
     },
     {
       "id": 9,
-      "name": "rare_book",
-      "description": "An ancient-looking book with a leather cover. The title is faded but still visible.",
-      "can_take": false
+      "name": "flare_gun",
+      "description": "An emergency flare gun with three flares remaining. Could signal for help.",
+      "can_take": true
     }
   ]
 }
