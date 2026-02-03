@@ -121,7 +121,7 @@ if __name__ == "__main__":
     game_log = EventList()  # This is REQUIRED as one of the baseline requirements
     game = AdventureGame('game_data.json', 1)  # load data, setting initial location ID to 1
     menu = ["look", "inventory", "score", "log", "quit"]  # Regular menu options available at each location
-    choice = None
+    choice = ""
 
     # Note: You may modify the code below as needed; the following starter code is just a suggestion
     while game.ongoing:
@@ -132,7 +132,7 @@ if __name__ == "__main__":
 
         #  Note that the <choice> variable should be the command which led to this event
         # YOUR CODE HERE
-        event = Event(location.id, choice)
+        event = Event(game.current_location_id, choice)
         game_log.add_event(event)
 
         #  print either full description (first time visit) or brief description (every subsequent visit) of location

@@ -1,13 +1,13 @@
-"""CSC111 Project 1: Text Adventure Game - Event Logger
+"""CSC111 Assignment 1: Text Adventure Game - Event Logger
 
 Instructions (READ THIS FIRST!)
 ===============================
 
-This Python module contains the code for Project 1. Please consult
+This Python module contains the code for Assignment 1. Please consult
 the project handout for instructions and details.
 
-You can copy/paste your code from Assignment 1 into this file, and modify it as
-needed to work with your game.
+Do NOT modify any function/method headers, type contracts, etc. in this class (similar
+to CSC110 assignments).
 
 Copyright and Usage Information
 ===============================
@@ -20,15 +20,12 @@ please consult our Course Syllabus.
 
 This file is Copyright (c) 2026 CSC111 Teaching Team
 """
-
 from __future__ import annotations
 from dataclasses import dataclass
 from typing import Optional
 
 
-# TODO: Copy/paste your A1 event_logger code below, and modify it if needed to fit your game
-
-
+# Note: We have completed the Event class for you. Do NOT modify it here for A1.
 @dataclass
 class Event:
     """
@@ -53,13 +50,21 @@ class EventList:
     A linked list of game events.
 
     Instance Attributes:
-        - # TODO add descriptions of instance attributes here
+        - first: The first Event in this linked list, or None if the list is empty
+        - last: The last Event in this linked list, or None if the list is empty
 
     Representation Invariants:
-        - # TODO add any appropriate representation invariants, if needed
+        - If the list is empty, first is None and last is None
+        - If the list is not empty, first is not None and last is not None
+        - If first is not None, first.prev is None
+        - If last is not None, last.next is None
+        - All events form a continuous bidirectional linked chain from first to last 
     """
     first: Optional[Event]
     last: Optional[Event]
+
+    # Note: You may ADD parameters/attributes/methods to this class as you see fit.
+    # But do not rename or remove any existing methods/attributes in this class
 
     def __init__(self) -> None:
         """Initialize a new empty event list."""
@@ -74,46 +79,66 @@ class EventList:
             print(f"Location: {curr.id_num}, Command: {curr.next_command}")
             curr = curr.next
 
-    # TODO: Complete the methods below, based on the given descriptions.
+    # TODO: Complete the methods below, based on the given descriptions. Do NOT change any of their specifications.
+    #  That is, the function headers (parameters, return type, etc.) must NOT be changed.
     def is_empty(self) -> bool:
         """Return whether this event list is empty."""
+        return self.first is None
 
-        # TODO: Your code below
-
-    def add_event(self, event: Event, command: str = None) -> None:
+    def add_event(self, event: Event, command: Optional[str] = None) -> None:
         """
         Add the given new event to the end of this event list.
         The given command is the command which was used to reach this new event, or None if this is the first
         event in the game.
         """
         # Hint: You should update the previous node's <next_command> as needed
-
-        # TODO: Your code below
-
+        if self.is_empty():
+            self.first = event
+            self.last = event
+        else:
+            if self.last is not None:
+                self.last.next_command = command
+                self.last.next = event
+                event.prev = self.last
+            self.last = event
+        
     def remove_last_event(self) -> None:
         """
         Remove the last event from this event list.
         If the list is empty, do nothing.
         """
         # Hint: The <next_command> and <next> attributes for the new last event should be updated as needed
-
-        # TODO: Your code below
-
+        if self.is_empty():
+            return
+        elif self.last is not None and self.last.prev is None:
+            # Only one event in the list
+            self.first = None
+            self.last = None
+        else:
+            # Multiple events in the list
+            if self.last is not None:
+                self.last = self.last.prev
+                if self.last is not None:
+                    self.last.next = None
+                    self.last.next_command = None
+        
     def get_id_log(self) -> list[int]:
         """Return a list of all location IDs visited for each event in this list, in sequence."""
+        log = []
+        curr = self.first
+        while curr:
+            log.append(curr.id_num)
+            curr = curr.next
+        return log
 
-        # TODO: Your code below
 
-    # Note: You may add other methods to this class as needed
-
-
-if __name__ == "__main__":
-    pass
+if __name__ == '__main__':
     # When you are ready to check your work with python_ta, uncomment the following lines.
     # (Delete the "#" and space before each line.)
     # IMPORTANT: keep this code indented inside the "if __name__ == '__main__'" block
-    # import python_ta
-    # python_ta.check_all(config={
-    #     'max-line-length': 120,
-    #     'disable': ['R1705', 'E9998', 'E9999', 'static_type_checker']
-    # })
+    import python_ta
+    python_ta.check_all(config={
+        'max-line-length': 120,
+        'allowed-io': ['EventList.display_events'],
+        'disable': ['R1705', 'static_type_checker']
+    })
