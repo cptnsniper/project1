@@ -1,0 +1,70 @@
+
+CSC111 Winter 2026 Assignment 1
+
+Note: Any FAQs or clarifications relevant to the assignment will be posted here. This post will be continually updated (with newer updates at the bottom of the page), so make sure to check on it regularly—click the “Watch” button in the top-right corner to receive notifications about this thread. If you have a question which is not already addressed on this page, create a new thread to post your question on Ed.
+
+In this assignment, you’ll apply what you’ve learned in the first two weeks of class about linked lists, as well as some other programming features from CSC110, to write a simulation of a text adventure game. This assignment will be extended in project 1 to be a larger playable game, where you are free to be creative!
+Logistics
+
+    Due date: Friday January 23, 1:00pm Toronto time.
+    General assignment expectations, including late policy and extensions: see the Assignment Expectations page and the syllabus. Note that the maximum extension you can get on this assignment is 3 days, not 7.
+    This assignment must be done individually. The work you submit must be your own. Please review the Academic Integrity policies in the syllabus and the honour_code.txt file included in the starter files on MarkUs (more below) which gives an overview of common mistakes students make in regards to academic integrity.
+    You will submit your assignment solutions on MarkUs (see Submission instructions at the end of this handout).
+
+Note: Even though project 1, which is done in groups, builds on this assignment, this assignment must be done individually.
+
+Starting on Monday January 26th at 2:00pm (the latest A1 due date for any students who request an extension), you may share and discuss your code with your group members.
+Starter files
+
+To obtain the starter files for this assignment:
+
+    Click this link to download the starter files for this assignment. This will download a zip file to your computer.
+    Extract the contents of this zip file into your csc111/assignments/ folder.
+    You should see a new a1 folder that contains the assignment’s starter files. This should look similar to what you had for CSC110’s assignments.
+
+General instructions
+
+Your programming work should be completed in the starter files provided. We have provided code at the bottom of each file for running PythonTA on each file. This assignment will be fully autograded, so we are not grading documentation or doctests on this assignment, but encourage you to add some as a way to understand each function we’ve asked you to complete. We are using PythonTA to grade your work, so please run that on the Python file you submit using the code we’ve provided in the main block.
+
+Warning: one of the purposes of this assignment is to evaluate your understanding and mastery of the concepts that we have covered so far. So on this assignment, you may only use parts of the Python programming language that we have covered in the first 13 chapters of the course notes. Other parts are not allowed, and parts of your submissions that use them may receive a grade as low as zero for doing so.
+Assignment description
+
+For this assignment, you are to write part of a small-scale text adventure game that takes place at your campus at the University of Toronto. This assignment will be a simple “simulator” of a game, rather than a playable game on its own, similar to the simulation described in chapter 11 of the course notes. In project 1, you will expand on this assignment to build a functional game, with additional features of your choice.
+
+If you haven’t played a text adventure game before, it’s worth messing around with one to get a feel for how it works. You can play one called Adventure online, one of the first and the namesake of “adventure game”.
+Theme for project 1
+
+    You and your friend spent the entire day yesterday finishing up your first-year CS project, and it has turned out brilliantly! You worked in various places throughout campus, moving from the library to a quiet corner in the coffee shop, and even worked on it during your lectures (instead of paying attention to your professors). The deadline is at 1pm today, and all that’s left is fixing a few PythonTA errors, and proofreading your written report, before submission. Your friend has a couple of lectures to attend today, but you assure them: “Don’t worry, I got this.” Sleep-deprived but determined, you settle down at your desk in your dorm room to power through the final fixes. You have a few hours until 1pm, so you decide to rest your eyes for a little while before you get started. Just a quick, little nap…
+
+    A while later, you wake up in a panic. You still have some time left (phew), but in your sleep-deprived state you didn’t realize that you are missing some key items (and you can’t remember where you last saw them)! Your USB drive (the only copy of your game, because of course you forgot to back it up), your laptop charger (your battery was at 5% when you sat down), and—worst of all—your lucky UofT mug. This isn’t just any mug—it’s the one that’s been with you through every late-night study session, every major deadline, and every all-nighter. You can’t possibly submit without it! The deadline is creeping closer, and your friend is counting on you. Can you track down your missing items and save your project grade (and your friendship!) before it’s too late?
+
+Note: this is the theme for project 1. Your assignment will only implement a subset of the features mentioned above.
+Assignment Requirements
+
+Your task is to:
+
+    Complete the EventList class in event_logger.py which keep track of game events. Anytime a user enters a command, that counts as one “event”. Each event is associated with the current game location, as well as the next location within a playthrough of the game.
+
+    Complete the given methods in the AdventureGameSimulation and SimpleAdventureGame classes in simulation.py so that the simulation class can generate an EventList of events based on the given list of commands. Follow the hints and guidelines within the provided starter code files.
+
+We have provided a tiny “game map” for you—see sample_locations.json—with just four locations. Use the provided methods, like AdventureGameSimulation.run and AdventureGameSimulation.get_id_log, to test your classes using this map, and possibly others that you create.
+
+This assignment will help you begin to conceptualize the idea of a text-based game, and how text commands are used to link one event to the next within such a game. It will also give you some practice with linked list-style methods, applying what we have been learning in class within a new context.
+
+For EventList, it may be helpful to look at tutorial 2, where we talk about some augmentations of linked lists. The doubly-linked list is similar to the EventList.
+
+For the code in simulation.py, it may be helpful to review chapter 11 from CSC110, where we discussed a simulation with events, similar to the simulation code you are writing in this assignment.
+Submission instructions
+
+Please proofread, test, and fix PythonTA errors in your work before your final submission!
+
+    Login to MarkUs.
+
+    Go to Assignment 1, then the “Submissions” tab.
+
+    Submit the following files: event_logger.py, simulation.py, and honour_code.txt. Please note that MarkUs is picky with filenames, and so your filenames must match these exactly, including using lowercase letters.
+
+    Note: for your Python code files, please make sure they run (in the Python console) before submitting them! Code submissions that do not run will receive a grade of zero for that part, which we do not want to happen to any of you, so please check your work carefully.
+
+    Refresh the page, and then download each file to make sure you submitted the right version.
+

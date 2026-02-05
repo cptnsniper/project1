@@ -48,11 +48,13 @@ class AdventureGameSimulation:
         self._events = EventList()
         self._game = AdventureGame(game_data_file, initial_location_id)
 
-        # TODO: Add first event (initial location, no previous command)
-        # Hint: self._game.get_location() gives you back the current location
+        # Add first event (initial location, no command to reach it)
+        first_location = self._game.get_location()
+        first_event = Event(first_location.id_num, first_location.long_description)
+        self._events.add_event(first_event, None)
 
-        # TODO: Generate the remaining events based on the commands and initial location
-        # Hint: Call self.generate_events with the appropriate arguments
+        # Generate the remaining events based on the commands and initial location
+        self.generate_events(commands, first_location)
 
     def generate_events(self, commands: list[str], current_location: Location) -> None:
         """
@@ -62,10 +64,24 @@ class AdventureGameSimulation:
         - len(commands) > 0
         - all commands in the given list are valid commands when starting from current_location
         """
+        for command in commands:
+            # Get next location ID from available_commands
+            next_location_id = current_location.available_commands[command]
 
-        # TODO: Complete this method as specified. For each command, generate the event and add it to self._events.
-        # Hint: current_location.available_commands[command] will return the next location ID
-        # which executing <command> while in <current_location_id> leads to
+            # Update game state
+            self._game.current_location_id = next_location_id
+
+            # Get the new location
+            next_location = self._game.get_location()
+
+            # Create event for the new location
+            new_event = Event(next_location.id_num, next_location.long_description)
+
+            # Add event with the command that led to it
+            self._events.add_event(new_event, command)
+
+            # Update current_location for next iteration
+            current_location = next_location
 
     def get_id_log(self) -> list[int]:
         """

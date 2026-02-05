@@ -94,8 +94,8 @@ class AdventureGame:
 
         locations = {}
         for loc_data in data['locations']:  # Go through each element associated with the 'locations' key in the file
-            location_obj = Location(loc_data['id'], loc_data['brief_description'], loc_data['long_description'],
-                                    loc_data['available_commands'], loc_data['items'])
+            location_obj = Location(loc_data['id'], loc_data['name'], loc_data['brief_description'],
+                                    loc_data['long_description'], loc_data['available_commands'], loc_data['items'])
             locations[loc_data['id']] = location_obj
 
         items = []
@@ -132,20 +132,46 @@ class AdventureGame:
         self.score += points
         print(f"Score increased by {points}! Total score: {self.score}")
 
+    def display_map(self) -> None:
+        """Display a map showing visited locations and unexplored paths."""
+        print("=== MAP ===")
+
+        # Collect visited locations
+        visited_locations = [loc for loc in self._locations.values() if loc.visited]
+
+        if not visited_locations:
+            print("You haven't explored anywhere yet.")
+            return
+
+        for location in visited_locations:
+            # Mark current location
+            if location.id_num == self.current_location_id:
+                print(f"\n[*] {location.name} (YOU ARE HERE)")
+            else:
+                print(f"\n[ ] {location.name}")
+
+            # Show connections
+            for command, dest_id in location.available_commands.items():
+                dest_location = self._locations.get(dest_id)
+                if dest_location and dest_location.visited:
+                    print(f"    {command} -> {dest_location.name}")
+                else:
+                    print(f"    {command} -> ?")
+
 
 if __name__ == "__main__":
     # When you are ready to check your work with python_ta, uncomment the following lines.
     # (Delete the "#" and space before each line.)
     # IMPORTANT: keep this code indented inside the "if __name__ == '__main__'" block
-    import python_ta
-    python_ta.check_all(config={
-        'max-line-length': 120,
-        'disable': ['R1705', 'E9998', 'E9999', 'static_type_checker']
-    })
+    #import python_ta
+    # python_ta.check_all(config={
+    #     'max-line-length': 120,
+    #     'disable': ['R1705', 'E9998', 'E9999', 'static_type_checker']
+    # })
 
     game_log = EventList()  # This is REQUIRED as one of the baseline requirements
     game = AdventureGame('game_data.json', 1)  # load data, setting initial location ID to 1
-    menu = ["look", "inventory", "score", "log", "quit", "help"]  # Regular menu options available at each location
+    menu = ["look", "inventory", "score", "log", "map", "quit", "help"]  # Regular menu options available at each location
     choice = ""
 
     # Note: You may modify the code below as needed; the following starter code is just a suggestion
@@ -156,9 +182,8 @@ if __name__ == "__main__":
         location = game.get_location()
 
         #  Note that the <choice> variable should be the command which led to this event
-        # YOUR CODE HERE
-        event = Event(game.current_location_id, choice)
-        game_log.add_event(event)
+        event = Event(game.current_location_id, location.long_description)
+        game_log.add_event(event, choice if choice else None)
 
         #  print either full description (first time visit) or brief description (every subsequent visit) of location
         # YOUR CODE HERE
@@ -169,7 +194,7 @@ if __name__ == "__main__":
             print(location.brief_description)
 
         # Display possible actions at this location
-        print("What to do? Choose from: look, inventory, score, log, quit, help")
+        print("What to do? Choose from: look, inventory, score, log, map, quit, help")
         print("At this location, you can also:")
         for action in location.available_commands:
             print("-", action)
@@ -193,12 +218,15 @@ if __name__ == "__main__":
                 print(f"Your current score: {game.score}")
             elif choice == "look":
                 print(location.long_description)
+            elif choice == "map":
+                game.display_map()
             elif choice == "help":
                 print("Available commands:")
                 print("  look - View the full description of the current location")
                 print("  inventory - Check what items you are carrying")
                 print("  score - Check your current score")
                 print("  log - View all events that have occurred")
+                print("  map - Display a map of visited locations")
                 print("  quit - Exit the game")
                 print("  help - Display this help message")
             elif choice == "quit":

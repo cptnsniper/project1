@@ -27,6 +27,7 @@ class Location:
 
     Instance Attributes:
         - id_num: unique identifier for this location
+        - name: the name of this location
         - brief_description: a brief description of the location
         - long_description: a detailed description of the location
         - available_commands: a dictionary of commands available at this location
@@ -35,6 +36,7 @@ class Location:
 
     Representation Invariants:
         - id_num is a unique integer identifier
+        - name is a non-empty string
         - brief_description and long_description are non-empty strings
         - available_commands is a dictionary of valid commands
         - items is a list of strings
@@ -42,6 +44,7 @@ class Location:
     """
 
     id_num: int
+    name: str
     brief_description: str
     long_description: str
     available_commands: dict[str, int]
