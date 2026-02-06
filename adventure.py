@@ -107,7 +107,7 @@ class AdventureGame:
         for loc_data in data['locations']:  # Go through each element associated with the 'locations' key in the file
             location_obj = Location(loc_data['id'], loc_data['name'], loc_data['brief_description'],
                                     loc_data['long_description'], loc_data['available_commands'], loc_data['items'],
-                                    False, loc_data.get('locked', False), loc_data.get('key_id', None))
+                                    False, loc_data.get('locked', False), loc_data.get('key_id', -1))
             locations[loc_data['id']] = location_obj
 
         items = []
@@ -182,6 +182,17 @@ class AdventureGame:
                 return item
         return None
 
+    def count_returned_items(self) -> int:
+        """Count how many required items have been returned to the target location."""
+        target_loc_id = 1
+        target_loc = self.get_location(target_loc_id)
+        required_items = ["usb_drive", "laptop_charger", "lucky_mug"]
+        count = 0
+        for item_name in required_items:
+            if item_name in target_loc.items:
+                count += 1
+        return count
+
     def check_win(self) -> bool:
         """Check if the player has won the game.
         
@@ -202,6 +213,15 @@ class AdventureGame:
                 return False
         return True
 
+    def check_secret_ending(self) -> bool:
+        """Check if the player triggered the secret ending.
+        
+        Secret ending: open_ai_api_key is in the dorm room.
+        """
+        target_loc_id = 1
+        target_loc = self.get_location(target_loc_id)
+        return "open_ai_api_key" in target_loc.items
+
 
 if __name__ == "__main__":
     # When you are ready to check your work with python_ta, uncomment the following lines.
@@ -215,8 +235,59 @@ if __name__ == "__main__":
 
     game_log = EventList()  # This is REQUIRED as one of the baseline requirements
     game = AdventureGame('game_data.json', 1)  # load data, setting initial location ID to 1
-    menu = ["look", "inventory", "score", "log", "map", "quit", "help"]  # Regular menu options available at each location
+    menu = ["look", "inventory", "score", "log", "map", "quit", "help", "examine"]  # Regular menu options available at each location
+    
+    # Command aliases
+    aliases = {
+        "n": "go north",
+        "s": "go south",
+        "e": "go east",
+        "w": "go west",
+        "u": "go up",
+        "d": "go down",
+        "i": "inventory",
+        "x": "examine",
+        "l": "look"
+    }
+    
     choice = ""
+    
+    # Display intro
+    print("=" * 60)
+    print(" CSC111 PROJECT ADVENTURE: THE MISSING ITEMS ".center(60))
+    print("=" * 60)
+    print()
+    print("OBJECTIVE: You have a critical project deadline approaching!")
+    print("Find and return these items to your Dorm Room:")
+    print("  • USB Drive (your project backup)")
+    print("  • Laptop Charger (you need power!)")
+    print("  • Lucky Mug (essential for success)")
+    print()
+    print("SELECT DIFFICULTY:")
+    print("  1. Easy (40 moves)")
+    print("  2. Normal (30 moves)")
+    print()
+    
+    difficulty = ""
+    while difficulty not in ["1", "2"]:
+        difficulty = input("Enter difficulty (1/2): ").strip()
+        if difficulty not in ["1", "2"]:
+            print("Invalid choice. Please enter 1 or 2.")
+    
+    if difficulty == "1":
+        game.max_moves = 40
+        print("\nDifficulty: EASY - You have 40 moves.")
+    else:
+        game.max_moves = 30
+        print("\nDifficulty: NORMAL - You have 30 moves.")
+    
+    print("\nQUICK COMMANDS: n/s/e/w/u/d (directions), i (inventory), x (examine)")
+    print("Type 'help' anytime for full command list.")
+    print()
+    print("⚡ SPEEDRUN CHALLENGE: Win in under 20 moves for an achievement! ⚡")
+    print()
+    input("Press ENTER to begin...")
+    print()
 
     # Note: You may modify the code below as needed; the following starter code is just a suggestion
     while game.ongoing:
@@ -235,7 +306,15 @@ if __name__ == "__main__":
         # --- UI DISPLAY ---
         print("\n" * 2)
         print("=" * 60)
-        print(f" MOVES: {game.moves}/{game.max_moves}  |  SCORE: {game.score} ".center(60))
+        
+        # Move warning and status
+        moves_left = game.max_moves - game.moves
+        items_returned = game.count_returned_items()
+        if moves_left <= 5 and moves_left > 0:
+            print(f" ⚠ WARNING: {moves_left} MOVES LEFT! ⚠ ".center(60))
+            print(f" MOVES: {game.moves}/{game.max_moves}  |  ITEMS: {items_returned}/3 ".center(60))
+        else:
+            print(f" MOVES: {game.moves}/{game.max_moves}  |  ITEMS: {items_returned}/3 ".center(60))
         print("=" * 60)
 
         # Print Location Header (REQUIRED)
@@ -249,6 +328,54 @@ if __name__ == "__main__":
         else:
             print(location.brief_description)
         print("-" * 60)
+
+        # Display exits summary and directional cross
+        direction_commands = {
+            "north": "go north",
+            "east": "go east",
+            "south": "go south",
+            "west": "go west",
+            "up": "go up",
+            "down": "go down"
+        }
+        exit_names = {}
+        for direction, command in direction_commands.items():
+            if command in location.available_commands:
+                dest_id = location.available_commands[command]
+                exit_names[direction] = game.get_location(dest_id).name
+            else:
+                exit_names[direction] = ""
+
+        available_dirs = [d for d, cmd in direction_commands.items()
+                          if cmd in location.available_commands]
+        if available_dirs:
+            print(f"You can go: {', '.join(available_dirs)}")
+        else:
+            print("You can go: nowhere")
+
+        def format_bracket(label: str) -> str:
+            return f"[{label}]" if label else "[ ]"
+
+        north = format_bracket(exit_names['north'])
+        west = format_bracket(exit_names['west'])
+        east = format_bracket(exit_names['east'])
+        south = format_bracket(exit_names['south'])
+        up = format_bracket(exit_names['up'])
+        down = format_bracket(exit_names['down'])
+        you = format_bracket("You")
+
+        col_width = max(len(north), len(west), len(east), len(south), len(up), len(down), len(you))
+        indent = " " * (col_width + 1)
+
+        print()
+        if exit_names['up']:
+            print(f"{indent}UP: {up}")
+        print(f"{indent}{north}")
+        print(f"{west.ljust(col_width)} {you.ljust(col_width)} {east.ljust(col_width)}")
+        print(f"{indent}{south}")
+        if exit_names['down']:
+            print(f"{indent}DOWN: {down}")
+        print()
 
         # Display Items
         if location.items:
@@ -270,21 +397,30 @@ if __name__ == "__main__":
             print(f"  [Action]: {', '.join(other_cmds)}")
         
         if location.items:
-            print("  [Interact]: take <item>")
+            print("  [Interact]: take <item>, examine <item>")
         if game.inventory:
             print("  [Interact]: drop <item>")
+        print("  [Aliases]: n/s/e/w/u/d (move), i (inventory), x (examine), l (look)")
         print("-" * 60)
 
         # Validate choice
         choice = ""
         while not choice:
-            choice = input("\n> ").lower().strip()
+            raw_choice = input("\n> ").lower().strip()
+            
+            # Expand aliases
+            if raw_choice in aliases:
+                choice = aliases[raw_choice]
+            elif raw_choice.startswith("x "):
+                choice = "examine " + raw_choice[2:]
+            else:
+                choice = raw_choice
             
             if choice in menu:
                 pass
             elif choice in location.available_commands:
                 pass
-            elif choice.startswith("take ") or choice.startswith("drop "):
+            elif choice == "take" or choice.startswith("take ") or choice.startswith("drop ") or choice.startswith("examine "):
                 pass
             else:
                 print("That was an invalid option; try again.")
@@ -292,7 +428,8 @@ if __name__ == "__main__":
 
         print("========")
         print("You decided to:", choice)
-        game.moves += 1
+        if choice not in menu:
+            game.moves += 1
 
         if choice in menu:
             if choice == "log":
@@ -307,18 +444,48 @@ if __name__ == "__main__":
                 game.display_map()
             elif choice == "help":
                 print("Available commands:")
-                print("  look - View the full description of the current location")
-                print("  inventory - Check what items you are carrying")
+                print("  look (l) - View the full description of the current location")
+                print("  inventory (i) - Check what items you are carrying")
+                print("  examine (x) <item> - Examine an item in detail")
                 print("  score - Check your current score")
                 print("  log - View all events that have occurred")
                 print("  map - Display a map of visited locations")
                 print("  take [item] - Pick up an item")
                 print("  drop [item] - Drop an item")
+                print("  go north/south/east/west/up/down (n/s/e/w/u/d) - Move in a direction")
                 print("  quit - Exit the game")
                 print("  help - Display this help message")
             elif choice == "quit":
-                print("Thank you for playing! Goodbye.")
-                game.ongoing = False
+                confirm = input("Are you sure you want to quit? (yes/no): ").lower().strip()
+                if confirm in ["yes", "y"]:
+                    print("Thank you for playing! Goodbye.")
+                    game.ongoing = False
+                else:
+                    print("Continuing game...")
+            elif choice == "examine":
+                if location.items or game.inventory:
+                    examine_item = input("Which item do you want to examine? ").lower().strip()
+                    if not examine_item:
+                        print("Examine cancelled.")
+                    else:
+                        # Check location items
+                        item_obj = None
+                        for loc_item in location.items:
+                            if loc_item.lower() == examine_item or (examine_item == "mug" and loc_item == "lucky_mug") or (examine_item == "usb" and loc_item == "usb_drive") or (examine_item == "charger" and loc_item == "laptop_charger") or (examine_item == "t-card" and loc_item == "t_card") or (examine_item == "card" and loc_item == "t_card") or (examine_item == "api" and loc_item == "open_ai_api_key") or (examine_item == "key" and loc_item == "open_ai_api_key") or (examine_item == "server" and loc_item == "server_room_key") or (examine_item == "room" and loc_item == "server_room_key"):
+                                item_obj = game.find_item_by_name(loc_item)
+                                break
+                        # Check inventory
+                        if not item_obj:
+                            for inv_item in game.inventory:
+                                if inv_item.name.lower() == examine_item or (examine_item == "mug" and inv_item.name == "lucky_mug") or (examine_item == "usb" and inv_item.name == "usb_drive") or (examine_item == "charger" and inv_item.name == "laptop_charger") or (examine_item == "t-card" and inv_item.name == "t_card") or (examine_item == "card" and inv_item.name == "t_card") or (examine_item == "api" and inv_item.name == "open_ai_api_key") or (examine_item == "key" and inv_item.name == "open_ai_api_key") or (examine_item == "server" and inv_item.name == "server_room_key") or (examine_item == "room" and inv_item.name == "server_room_key"):
+                                    item_obj = inv_item
+                                    break
+                        if item_obj:
+                            print(f"\n{item_obj.name.upper()}: {item_obj.description}")
+                        else:
+                            print(f"There is no {examine_item} to examine here.")
+                else:
+                    print("There are no items to examine.")
 
         elif choice in location.available_commands:
             # Handle movement
@@ -355,13 +522,45 @@ if __name__ == "__main__":
                 game.current_location_id = next_location_id
                 print(f"You move to location {game.current_location_id}.")
             
-        elif choice.startswith("take "):
-            item_name = choice.replace("take ", "").strip()
+        elif choice.startswith("examine "):
+            examine_item = choice.replace("examine ", "").strip()
+            # Check location items
+            item_obj = None
+            for loc_item in location.items:
+                if loc_item.lower() == examine_item or (examine_item == "mug" and loc_item == "lucky_mug") or (examine_item == "usb" and loc_item == "usb_drive") or (examine_item == "charger" and loc_item == "laptop_charger") or (examine_item == "t-card" and loc_item == "t_card") or (examine_item == "card" and loc_item == "t_card") or (examine_item == "api" and loc_item == "open_ai_api_key") or (examine_item == "key" and loc_item == "open_ai_api_key") or (examine_item == "server" and loc_item == "server_room_key") or (examine_item == "room" and loc_item == "server_room_key"):
+                    item_obj = game.find_item_by_name(loc_item)
+                    break
+            # Check inventory
+            if not item_obj:
+                for inv_item in game.inventory:
+                    if inv_item.name.lower() == examine_item or (examine_item == "mug" and inv_item.name == "lucky_mug") or (examine_item == "usb" and inv_item.name == "usb_drive") or (examine_item == "charger" and inv_item.name == "laptop_charger") or (examine_item == "t-card" and inv_item.name == "t_card") or (examine_item == "card" and inv_item.name == "t_card") or (examine_item == "api" and inv_item.name == "open_ai_api_key") or (examine_item == "key" and inv_item.name == "open_ai_api_key") or (examine_item == "server" and inv_item.name == "server_room_key") or (examine_item == "room" and inv_item.name == "server_room_key"):
+                        item_obj = inv_item
+                        break
+            if item_obj:
+                print(f"\n{item_obj.name.upper()}: {item_obj.description}")
+            else:
+                print(f"There is no {examine_item} to examine here.")
+                
+        elif choice == "take" or choice.startswith("take "):
+            if choice == "take":
+                if not location.items:
+                    print("There is nothing to take here.")
+                    continue
+                if len(location.items) == 1:
+                    item_name = location.items[0]
+                else:
+                    print(f"Items here: {', '.join(location.items)}")
+                    item_name = input("Which item do you want to take? ").lower().strip()
+                    if not item_name:
+                        print("Take cancelled.")
+                        continue
+            else:
+                item_name = choice.replace("take ", "").strip()
             # Special case for "mug" alias or exact matches
             items_to_check = location.items[:]
             found = False
             for loc_item in items_to_check:
-                if loc_item.lower() == item_name.lower() or (item_name == "mug" and loc_item == "lucky_mug") or (item_name == "usb" and loc_item == "usb_drive") or (item_name == "charger" and loc_item == "laptop_charger") or (item_name == "t-card" and loc_item == "t_card") or (item_name == "card" and loc_item == "t_card"):
+                if loc_item.lower() == item_name.lower() or (item_name == "mug" and loc_item == "lucky_mug") or (item_name == "usb" and loc_item == "usb_drive") or (item_name == "charger" and loc_item == "laptop_charger") or (item_name == "t-card" and loc_item == "t_card") or (item_name == "card" and loc_item == "t_card") or (item_name == "api" and loc_item == "open_ai_api_key") or (item_name == "key" and loc_item == "open_ai_api_key") or (item_name == "server" and loc_item == "server_room_key") or (item_name == "room" and loc_item == "server_room_key"):
                     item_obj = game.find_item_by_name(loc_item)
                     if item_obj and item_obj.can_take:
                         game.add_item_to_inventory(item_obj)
@@ -381,7 +580,7 @@ if __name__ == "__main__":
             # Find item in inventory
             item_obj = None
             for item in game.inventory:
-                if item.name.lower() == item_name.lower() or (item_name == "mug" and item.name == "lucky_mug") or (item_name == "usb" and item.name == "usb_drive") or (item_name == "charger" and item.name == "laptop_charger") or (item_name == "t-card" and item.name == "t_card") or (item_name == "card" and item.name == "t_card"):
+                if item.name.lower() == item_name.lower() or (item_name == "mug" and item.name == "lucky_mug") or (item_name == "usb" and item.name == "usb_drive") or (item_name == "charger" and item.name == "laptop_charger") or (item_name == "t-card" and item.name == "t_card") or (item_name == "card" and item.name == "t_card") or (item_name == "api" and item.name == "open_ai_api_key") or (item_name == "key" and item.name == "open_ai_api_key") or (item_name == "server" and item.name == "server_room_key") or (item_name == "room" and item.name == "server_room_key"):
                     item_obj = item
                     break
             
@@ -393,10 +592,75 @@ if __name__ == "__main__":
                 # Check scoring
                 if location.id_num == item_obj.target_position:
                     game.increase_score(item_obj.target_points)
+                    # Show progress
+                    items_count = game.count_returned_items()
+                    if item_obj.name in ["usb_drive", "laptop_charger", "lucky_mug"]:
+                        print(f"✓ Required item returned! ({items_count}/3 items back)")
+                
+                # Check for secret ending FIRST
+                if game.check_secret_ending():
+                    print("\n" + "=" * 60)
+                    print(" 🤖 SECRET ENDING UNLOCKED! 🤖 ".center(60))
+                    print("=" * 60)
+                    print()
+                    print("You stare at the OpenAI API key in your hand...")
+                    print("'Why work hard when AI can do it for me?' you think.")
+                    print()
+                    print("You fire up your laptop and let the AI complete your assignment.")
+                    print("You kick back, cross your hands behind your head and smile, relaxing while the code writes itself.")
+                    print("'This is too easy!' you laugh, submitting the perfect project.")
+                    print()
+                    print("Three days later...")
+                    print()
+                    print("An email from the Academic Integrity Office appears in your inbox.")
+                    print("Your TA noticed the AI-generated patterns in your code.")
+                    print("The plagiarism detector flagged your entire submission.")
+                    print()
+                    print("📧 You have been charged with academic dishonesty.")
+                    print("📉 Assignment grade: 0%")
+                    print("⚖️  Academic penalty: Suspension from the course")
+                    print()
+                    print("💡 LESSON LEARNED: There are no shortcuts to real learning!")
+                    print()
+                    print(f"Moves used: {game.moves}")
+                    print("=" * 60)
+                    print()
+                    print("          GAME OVER - SECRET ENDING")
+                    print()
+                    game.ongoing = False
                     
                 # Check win condition
-                if game.check_win():
-                    print("CONGRATULATIONS! You have returned all missing items and saved the project!")
+                elif game.check_win():
+                    print("\n" + "=" * 60)
+                    print(" 🎉🎊 MISSION COMPLETE! 🎊🎉 ".center(60))
+                    print("=" * 60)
+                    print()
+                    print("🏆 YOU DID IT! 🏆")
+                    print()
+                    print("With all three items safely back in your dorm room,")
+                    print("you fire up your laptop and submit the project!")
+                    print()
+                    print("The progress bar crawls to 100%...")
+                    print("✓ Project submitted successfully!")
+                    print()
+                    print("You lean back with a satisfied grin. Crisis averted!")
+                    print()
+                    print("────────────────────────────────────────────────────────────")
+                    print(f"   📊 FINAL STATS")
+                    print("────────────────────────────────────────────────────────────")
+                    print(f"   Moves Used: {game.moves}/{game.max_moves}")
+                    print(f"   Final Score: {game.score} points")
+                    print(f"   Items Recovered: 3/3 ✓")
+                    if game.moves < 20:
+                        print()
+                        print("   ⚡⚡⚡ ACHIEVEMENT UNLOCKED! ⚡⚡⚡")
+                        print("   🏃 SPEEDRUNNER: Completed in under 20 moves!")
+                        print("   You're a legend! 🌟")
+                    print()
+                    print("────────────────────────────────────────────────────────────")
+                    print()
+                    print("Thanks for saving the day! See you next deadline! 👋")
+                    print("=" * 60)
                     game.ongoing = False
             else:
                 print(f"You are not carrying {item_name}.")

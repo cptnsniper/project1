@@ -6,102 +6,382 @@
 \usepackage[margin=0.75in]{geometry}
 
 \title{CSC111 Winter 2026 Project 1}
-\author{TODO: FILL IN YOUR NAME(S) HERE}
+\author{Alexander Davydenko, Sophi Shu, Abhirve Munipalle}
 \date{\today}
 
 \begin{document}
 \maketitle
 
 \section*{Running the game}
-We should be able to run your game by simply running \texttt{adventure.py}. If you have any other requirements (e.g., installing certain modules), describe them here. Otherwise, skip this section.
+Run the game by executing \texttt{python adventure.py} in the terminal. No additional module installations are required beyond the standard Python library.
 
 \section*{Game Map}
-Example game map below (edit it to show your actual game map):
+The game map consists of 7 locations connected as follows:
 
 \begin{verbatim}
-  1  2  3
- -1  4 -1
- -1  5 -1
+                [4: Robarts Library (Locked)] - [6: CSC111 Lecture Room]
+                        |
+     [2: Hallway] - [3: University College]
+         |                  |
+    [1: Dorm Room]   [5: Bahen Centre]
+                            |
+                    [7: Secret Server Room] (locked)
+                        
 \end{verbatim}
 
-Starting location is: 1
+Starting location is: 1 (Dorm Room)
 
 \section*{Game solution}
-List of commands:
+Winning command list (one possible solution):
+
+\begin{verbatim}
+take t_card
+go north
+go east
+go north
+take usb_drive
+go south
+go south
+take laptop_charger
+go north
+go north
+go east
+take lucky_mug
+go west
+go south
+go west
+go south
+drop usb_drive
+drop laptop_charger
+drop lucky_mug
+\end{verbatim}
 
 \section*{Lose condition(s)}
 Description of how to lose the game:
 
-List of commands:
+The player loses if they exceed the maximum number of moves without completing the objective. The move limit depends on difficulty:
+\begin{itemize}
+    \item Easy mode: 40 moves
+    \item Normal mode: 30 moves
+\end{itemize}
 
 Which parts of your code are involved in this functionality:
 
-% Copy-paste the above if you have multiple lose conditions and describe each possible way to lose the game
+\texttt{adventure.py}, lines 292-297 in the main game loop checks if \texttt{game.moves >= game.max\_moves} and sets \texttt{game.ongoing = False} when the condition is met.
 
 \section*{Inventory}
 
 \begin{enumerate}
-\item All location IDs that involve items in the game:
+\item All location IDs that involve items in the game: 1, 4, 5, 6, 7
 
 \item Item data:
 \begin{enumerate}
-    \item For Item 1:
+    \item For Item 1 (usb\_drive):
     \begin{itemize}
-    \item Item name:
-    \item Item start location ID:
-    \item Item target location ID:
+    \item Item name: usb\_drive
+    \item Item start location ID: 4 (Robarts Library)
+    \item Item target location ID: 1 (Dorm Room)
     \end{itemize}
-        \item For Item 2:
+    \item For Item 2 (laptop\_charger):
     \begin{itemize}
-    \item Item name:
-    \item Item start location ID:
-    \item Item target location ID:
+    \item Item name: laptop\_charger
+    \item Item start location ID: 5 (Bahen Centre)
+    \item Item target location ID: 1 (Dorm Room)
     \end{itemize}
-        \item For Item 3:
+    \item For Item 3 (lucky\_mug):
     \begin{itemize}
-    \item Item name:
-    \item Item start location ID:
-    \item Item target location ID:
+    \item Item name: lucky\_mug
+    \item Item start location ID: 6 (CSC111 Lecture Room)
+    \item Item target location ID: 1 (Dorm Room)
     \end{itemize}
-    % Copy-paste the above if you have more items, to list ALL items
+    \item For Item 4 (t\_card):
+    \begin{itemize}
+    \item Item name: t\_card
+    \item Item start location ID: 1 (Dorm Room)
+    \item Item target location ID: 4 (Robarts Library) - used as a key
+    \end{itemize}
+    \item For Item 5 (server\_room\_key):
+    \begin{itemize}
+    \item Item name: server\_room\_key
+    \item Item start location ID: 5 (Bahen Centre)
+    \item Item target location ID: 5 (Bahen Centre) - used as a key
+    \end{itemize}
+    \item For Item 6 (open\_ai\_api\_key):
+    \begin{itemize}
+    \item Item name: open\_ai\_api\_key
+    \item Item start location ID: 7 (Secret Server Room)
+    \item Item target location ID: 1 (Dorm Room) - secret ending trigger
+    \end{itemize}
 \end{enumerate}
 
-    \item Exact command(s) that should be used to pick up an item (choose any one or more items for this example), and the command(s) used to use/drop the item (can copy the list you assigned to \texttt{inventory\_demo} in the \texttt{simulation.py} file)
-    \item Which parts of your code (file, class, function/method) are involved in handling the \texttt{inventory} command:
+    \item Exact command(s) to pick up and drop items (inventory\_demo):
+\begin{verbatim}
+take t_card
+go north
+go east
+go north
+take usb_drive
+inventory
+drop usb_drive
+take usb_drive
+\end{verbatim}
+    
+    \item Which parts of your code are involved in handling the \texttt{inventory} command:
+    \begin{itemize}
+        \item File: \texttt{adventure.py}
+        \item Class: \texttt{AdventureGame}
+        \item Methods: \texttt{display\_inventory()} (lines 137-143), \texttt{add\_item\_to\_inventory()} (lines 133-135)
+        \item Main loop: Lines 427-428 handle the inventory command
+    \end{itemize}
 \end{enumerate}
 
 \section*{Score}
 \begin{enumerate}
 
-    \item Briefly describe the way players can earn score in your game. Include the first location in which they can increase their score, and the exact list of command(s) leading up to the score increase:
+    \item Briefly describe the way players can earn score in your game:
+    
+    Players earn points by returning items to their target location (Dorm Room, location ID 1). Each of the three required items awards different points:
+    \begin{itemize}
+        \item usb\_drive: 50 points when dropped in Dorm Room
+        \item laptop\_charger: 30 points when dropped in Dorm Room
+        \item lucky\_mug: 20 points when dropped in Dorm Room
+    \end{itemize}
+    
+    The first location where score can be increased is location 1 (Dorm Room), after collecting and dropping any of the required items.
+    
+    Commands leading to the first score increase:
+\begin{verbatim}
+take t_card
+go north
+go east
+go south
+take laptop_charger
+go north
+go west
+go south
+drop laptop_charger
+\end{verbatim}
 
+    \item scores\_demo command list:
+\begin{verbatim}
+take t_card
+score
+go north
+go east
+go south
+take laptop_charger
+score
+go north
+go west
+go south
+drop laptop_charger
+score
+\end{verbatim}
 
-    \item Copy the list you assigned to \texttt{scores\_demo} in the \texttt{simulation.py} file into this section of the report:
-
-
-    \item Which parts of your code (file, class, function/method) are involved in handling the \texttt{score} functionality:
+    \item Which parts of your code are involved in handling the \texttt{score} functionality:
+    \begin{itemize}
+        \item File: \texttt{adventure.py}
+        \item Class: \texttt{AdventureGame}
+        \item Method: \texttt{increase\_score()} (lines 145-148)
+        \item Instance variable: \texttt{self.score} (initialized line 93)
+        \item Main loop: Lines 429-430 handle the score display command
+        \item Score increase logic: Lines 577-583 check if item is dropped at target location and awards points
+    \end{itemize}
 \end{enumerate}
 
 \section*{Enhancements}
 \begin{enumerate}
-    \item Describe your enhancement \#1 here
+    \item Enhanced User Interface System
     \begin{itemize}
-        \item Brief description of what the enhancement is (if it's a puzzle, also describe what steps the player must take to solve it):
-        \item Complexity level (choose from low/medium/high):
-        \item Reasons you believe this is the complexity level (e.g., mention implementation details, how much code did you have to add/change from the baseline, what challenges did you face, etc.)
-        \item Name the parts of the code which are involved in this enhancement
-        \item Copy the list you assigned to \texttt{enhancements\_demo} in the \texttt{simulation.py} file into this section of the report:
+        \item Brief description: A comprehensive UI overhaul including:
+        \begin{itemize}
+            \item Directional cross showing available exits with location names
+            \item Item counter (X/3) replacing score in status bar
+            \item Move warning when 5 or fewer moves remain
+            \item Command aliases (n/s/e/w/u/d for movement, i for inventory, x for examine, l for look)
+            \item Visual formatting with borders, spacing, and organized sections
+        \end{itemize}
+        \item Reasons: This enhancement required significant code restructuring across multiple sections. The directional cross system involves parsing available commands, formatting dynamic brackets based on longest location name, and handling vertical (up/down) directions separately. The UI updates happen every turn and must dynamically adjust to the current location's connections. Implementation spans 50+ lines of code with complex string formatting and conditional logic.
+        \item Code involvement:
+        \begin{itemize}
+            \item \texttt{adventure.py} lines 299-312: Status bar with items counter and move warning
+            \item \texttt{adventure.py} lines 332-378: Directional cross generation and display
+            \item \texttt{adventure.py} lines 241-251: Command aliases dictionary
+            \item \texttt{adventure.py} lines 404-416: Alias expansion in input handling
+        \end{itemize}
+        \item Enhancement demo commands:
+\begin{verbatim}
+n
+s
+i
+map
+look
+\end{verbatim}
     \end{itemize}
 
-    % Uncomment below section if you have more enhancements; copy-paste as needed
-    %\item Describe your enhancement here
-    %\begin{itemize}
-    %    \item Basic description of what the enhancement is:
-    %    \item Complexity level (low/medium/high):
-    %    \item Reasons you believe this is the complexity level (e.g., mention implementation details)
-    %    \item Name the parts of the code which are involved in this enhancement
-    %    \item Copy the list you assigned to \texttt{enhancements\_demo} in the \texttt{simulation.py} file into this section of the report:
-    %\end{itemize}
+    \item Examine Items Feature
+    \begin{itemize}
+        \item Brief description: Players can examine items without picking them up using the 'examine' or 'x' command. Works for items in the current location or in the player's inventory. Shows detailed item descriptions.
+        \item Reasons: Required implementing item search across both location items and inventory, handling multiple item aliases (mug, usb, charger, etc.), and integrating with the command system. The feature needed to be accessible both as a standalone command and with arguments. Code spans multiple sections including menu handling, alias expansion, and item lookup logic (approximately 60 lines).
+        \item Code involvement:
+        \begin{itemize}
+            \item \texttt{adventure.py} lines 455-474: Examine command in menu handler
+            \item \texttt{adventure.py} lines 514-529: Examine with argument handler
+            \item Item aliases integrated in lines 464, 470, 520, 526
+        \end{itemize}
+        \item Enhancement demo commands:
+\begin{verbatim}
+examine t_card
+x t_card
+go north
+go east
+go south
+examine laptop_charger
+\end{verbatim}
+    \end{itemize}
+
+    \item Locked Locations Puzzle System
+    \begin{itemize}
+        \item Brief description: Players must find specific keys to unlock certain locations. Robarts Library requires the t\_card, and the Secret Server Room requires the server\_room\_key. Without the required key, players cannot enter these locations. Once unlocked, locations remain accessible.
+        \item Reasons: This is a complex puzzle system requiring:
+        \begin{itemize}
+            \item Modified Location class to support locked state and key\_id
+            \item Item class extension to track which items serve as keys
+            \item JSON data structure additions for locked locations
+            \item Movement command logic to check inventory for keys
+            \item Feedback system to inform players why they can't enter
+            \item Permanent state changes once unlocked
+        \end{itemize}
+        Changes span multiple files (\texttt{game\_entities.py}, \texttt{adventure.py}, \texttt{game\_data.json}) and involve data structure modifications, inventory checking, and conditional movement logic.
+        \item Code involvement:
+        \begin{itemize}
+            \item \texttt{game\_entities.py} lines 34-35, 54-57: Location class lock attributes
+            \item \texttt{adventure.py} lines 109-110: Loading lock data from JSON
+            \item \texttt{adventure.py} lines 489-510: Lock checking logic in movement handler
+            \item \texttt{game\_data.json}: Robarts Library (id 4) and Secret Server Room (id 7) with locked/key\_id fields
+        \end{itemize}
+        \item Enhancement demo commands:
+\begin{verbatim}
+go north
+go east
+go north
+(fails - locked)
+go south
+go west
+go south
+take t_card
+go north
+go east
+go north
+(succeeds - unlocked with key)
+\end{verbatim}
+    \end{itemize}
+
+    \item Secret Ending Path
+    \begin{itemize}
+        \item Brief description: Players can discover a secret ending by finding the open\_ai\_api\_key in the hidden Secret Server Room and returning it to their Dorm Room. This triggers an alternate ending where the player uses AI to complete the assignment but gets caught for academic dishonesty, resulting in a 0\% grade and suspension.
+        \item Reasons: This feature required:
+        \begin{itemize}
+            \item Adding a new hidden location (Secret Server Room) accessible only via locked door
+            \item Creating a new quest item with unique behavior
+            \item Implementing alternate ending condition that checks before win condition
+            \item Integrating with the item drop system to trigger the ending
+        \end{itemize}
+        The implementation involves careful ordering of checks (secret ending before win condition), and integration with existing systems. Code spans multiple files and includes narrative design.
+        \item Code involvement:
+        \begin{itemize}
+            \item \texttt{adventure.py} lines 219-225: \texttt{check\_secret\_ending()} method
+            \item \texttt{adventure.py} lines 586-620: Secret ending trigger and narrative
+            \item \texttt{game\_data.json}: Location 7 (Secret Server Room) and item 5 (open\_ai\_api\_key)
+        \end{itemize}
+        \item Enhancement demo commands:
+\begin{verbatim}
+go north
+go east
+go south
+take server_room_key
+go down
+take open_ai_api_key
+go up
+go north
+go west
+go south
+drop open_ai_api_key
+\end{verbatim}
+    \end{itemize}
+
+    \item Difficulty Selection \& Achievement System
+    \begin{itemize}
+        \item Brief description: At game start, players choose between Easy (40 moves) or Normal (30 moves) difficulty. Players who complete the game in under 20 moves earn the "Speedrunner" achievement shown on the victory screen.
+        \item Reasons: Required implementing:
+        \begin{itemize}
+            \item Pre-game menu system with input validation
+            \item Dynamic move limit adjustment based on difficulty
+            \item Move tracking and comparison at win condition
+            \item Enhanced victory screen with conditional achievement display
+        \end{itemize}
+        The feature integrates with the intro sequence, game state management, and win condition checking.
+        \item Code involvement:
+        \begin{itemize}
+            \item \texttt{adventure.py} lines 267-283: Difficulty selection menu
+            \item \texttt{adventure.py} lines 640-643: Speedrunner achievement check
+            \item \texttt{adventure.py} line 287: Achievement promotion in intro
+        \end{itemize}
+        \item Enhancement demo: Complete the game in under 20 moves to see the achievement
+    \end{itemize}
+
+    \item Dynamic Map Display
+    \begin{itemize}
+        \item Brief description: The 'map' command shows all visited locations with their connections. The current location is marked with "YOU ARE HERE". Connections show location names if visited, or "?" if unexplored.
+        \item Reasons: Implementation required:
+        \begin{itemize}
+            \item Tracking visited state for all locations
+            \item Iterating through location connections
+            \item Conditional display based on visit status
+            \item Marking current position
+        \end{itemize}
+        The feature provides valuable navigation assistance and integrates with the location visiting system.
+        \item Code involvement:
+        \begin{itemize}
+            \item \texttt{adventure.py} lines 150-171: \texttt{display\_map()} method
+            \item \texttt{adventure.py} lines 433-434: Map command handler
+            \item \texttt{game\_entities.py} line 53: visited attribute in Location class
+        \end{itemize}
+        \item Enhancement demo commands:
+\begin{verbatim}
+map
+go north
+map
+go east
+map
+\end{verbatim}
+    \end{itemize}
+
+    \item Smart Item Interaction
+    \begin{itemize}
+        \item Brief description: Players can type just 'take' without specifying an item. If there's only one item in the location, it's automatically picked up. If multiple items exist, the game prompts the player to choose.
+        \item Reasons: Simple conditional logic that checks item count and either auto-selects the single item or prompts for selection. Implementation is straightforward but improves user experience significantly.
+        \item Code involvement:
+        \begin{itemize}
+            \item \texttt{adventure.py} lines 534-545: Auto-take logic
+        \end{itemize}
+        \item Enhancement demo commands:
+\begin{verbatim}
+take
+(automatically takes t_card)
+\end{verbatim}
+    \end{itemize}
+
+    \item Quit Confirmation
+     \begin{itemize}
+        \item Brief description: When the player types 'quit', the game asks "Are you sure you want to quit? (yes/no)" to prevent accidental exits.
+        \item Reasons: Simple confirmation prompt with yes/no validation. Straightforward implementation that prevents frustrating accidental quits.
+        \item Code involvement:
+        \begin{itemize}
+            \item \texttt{adventure.py} lines 449-454: Quit confirmation handler
+        \end{itemize}
+        \item Enhancement demo: Type 'quit' then 'no' to see confirmation
+    \end{itemize}
 \end{enumerate}
 
 

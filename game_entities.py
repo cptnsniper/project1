@@ -34,7 +34,7 @@ class Location:
         - items: a list of items available at this location
         - visited: whether the player has visited this location
         - locked: whether the location is locked and requires a key to enter
-        - key_id: the ID of the item required to unlock this location (None if no key is needed)
+        - key_id: the ID of the item required to unlock this location (-1 if no key is needed)
 
     Representation Invariants:
         - id_num is a unique integer identifier
@@ -54,7 +54,7 @@ class Location:
     items: list[str]
     visited: bool = False
     locked: bool = False
-    key_id: int = None
+    key_id: int = -1
 
 
 @dataclass
@@ -70,14 +70,14 @@ class Item:
         - target_points: the points awarded for delivering this item
 
     Representation Invariants:
-        - id is a unique string identifier
+        - id is a unique identifier
         - name is a non-empty string
         - can_take is True or False
         - target_position is a valid location ID
         - target_points is a non-negative integer
     """
 
-    id: str
+    id: int
     name: str
     description: str
     can_take: bool

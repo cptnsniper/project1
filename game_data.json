@@ -49,12 +49,13 @@
     {
       "id": 5,
       "name": "Bahen Centre",
-      "brief_description": "You are in the Bahen Centre atrium. It's buzzing with CS students. You can return North to University College.",
-      "long_description": "You walk into the Bahen Centre. It's bright and modern, buzzing with students coding on their specific CS assignments. You see the corner table where you and your friend were working yesterday. You can return North to University College.",
+      "brief_description": "You are in the Bahen Centre atrium. It's buzzing with CS students. You can return North to University College or go Down to the basement.",
+      "long_description": "You walk into the Bahen Centre. It's bright and modern, buzzing with students coding on their specific CS assignments. You see the corner table where you and your friend were working yesterday. On the floor near the stairwell, you notice something glinting. You can return North to University College or descend Down to the basement.",
       "available_commands": {
-        "go north": 3
+        "go north": 3,
+        "go down": 7
       },
-      "items": ["laptop_charger"]
+      "items": ["laptop_charger", "server_room_key"]
     },
     {
       "id": 6,
@@ -65,6 +66,18 @@
         "go west": 4
       },
       "items": ["lucky_mug"]
+    },
+    {
+      "id": 7,
+      "name": "Secret Server Room",
+      "brief_description": "You are in a hidden server room. Rows of blinking servers hum quietly. You can return Up to Bahen Centre.",
+      "long_description": "You descend into a dimly lit basement server room. Rows upon rows of servers blink with activity, their cooling fans creating a steady hum. In the corner, someone has carelessly left something on a desk... The exit leads Up to Bahen Centre.",
+      "available_commands": {
+        "go up": 5
+      },
+      "items": ["open_ai_api_key"],
+      "locked": true,
+      "key_id": 6
     }
   ],
   "items": [
@@ -96,6 +109,22 @@
       "id": 4,
       "name": "t_card",
       "description": "Your Student T-Card. You need this to access library buildings.",
+      "can_take": true,
+      "target_position": 1,
+      "target_points": 0
+    },
+    {
+      "id": 5,
+      "name": "open_ai_api_key",
+      "description": "A mysterious API key someone left behind. It grants access to powerful AI tools... but at what cost?",
+      "can_take": true,
+      "target_position": 1,
+      "target_points": 0
+    },
+    {
+      "id": 6,
+      "name": "server_room_key",
+      "description": "A metal key labeled 'SERVER ROOM - AUTHORIZED ACCESS ONLY'. Someone must have dropped this.",
       "can_take": true,
       "target_position": 1,
       "target_points": 0
