@@ -38,11 +38,15 @@ class AdventureGame:
         - ongoing: whether the game is ongoing (True) or has ended (False)
         - inventory: list of Item objects the player is carrying
         - score: the player's current score
+        - moves: the number of moves the player has taken so far
+        - max_moves: the maximum number of moves allowed before game over
 
     Representation Invariants:
         - self.current_location_id in self._locations
         - self.ongoing is True or False
         - self.score >= 0
+        - self.moves >= 0
+        - self.max_moves > 0
     """
 
     # Private Instance Attributes (do NOT remove these two attributes):
@@ -56,6 +60,11 @@ class AdventureGame:
     ongoing: bool
     inventory: list[Item]
     score: int
+    moves: int
+    max_moves: int
+
+    # Constants
+    MAX_MOVES = 20
 
     def __init__(self, game_data_file: str, initial_location_id: int) -> None:
         """
@@ -82,6 +91,8 @@ class AdventureGame:
         self.ongoing = True  # whether the game is ongoing
         self.inventory = []  # items the player is carrying
         self.score = 0  # player's score
+        self.moves = 0  # player's moves
+        self.max_moves = AdventureGame.MAX_MOVES  # max number of moves
 
     @staticmethod
     def _load_game_data(filename: str) -> tuple[dict[int, Location], list[Item]]:
@@ -95,13 +106,15 @@ class AdventureGame:
         locations = {}
         for loc_data in data['locations']:  # Go through each element associated with the 'locations' key in the file
             location_obj = Location(loc_data['id'], loc_data['name'], loc_data['brief_description'],
-                                    loc_data['long_description'], loc_data['available_commands'], loc_data['items'])
+                                    loc_data['long_description'], loc_data['available_commands'], loc_data['items'],
+                                    False, loc_data.get('locked', False), loc_data.get('key_id', None))
             locations[loc_data['id']] = location_obj
 
         items = []
 
         for item_data in data['items']:
-            item_obj = Item(item_data['id'], item_data['name'], item_data['description'], item_data['can_take'])
+            item_obj = Item(item_data['id'], item_data['name'], item_data['description'], item_data['can_take'],
+                            item_data['target_position'], item_data['target_points'])
             items.append(item_obj)
 
         return locations, items
@@ -158,12 +171,43 @@ class AdventureGame:
                 else:
                     print(f"    {command} -> ?")
 
+    def find_item_by_name(self, name: str) -> Optional[Item]:
+        """Return the Item object with the given name, or None if not found.
+        
+        Preconditions:
+            - name is not empty
+        """
+        for item in self._items:
+            if item.name.lower() == name.lower():
+                return item
+        return None
+
+    def check_win(self) -> bool:
+        """Check if the player has won the game.
+        
+        The player wins if they have returned all required items (usb_drive, laptop_charger, lucky_mug)
+        to the target location (Location 1: Dorm Room).
+        """
+        # Win condition: specific items are at their target positions
+        # Required: usb_drive (id 1), laptop_charger (id 2), lucky_mug (id 3)
+        # Target for all is Dorm Room (id 1)
+        
+        target_loc_id = 1
+        target_loc = self.get_location(target_loc_id)
+        
+        required_items = ["usb_drive", "laptop_charger", "lucky_mug"]
+        
+        for item_name in required_items:
+            if item_name not in target_loc.items:
+                return False
+        return True
+
 
 if __name__ == "__main__":
     # When you are ready to check your work with python_ta, uncomment the following lines.
     # (Delete the "#" and space before each line.)
     # IMPORTANT: keep this code indented inside the "if __name__ == '__main__'" block
-    #import python_ta
+    # import python_ta
     # python_ta.check_all(config={
     #     'max-line-length': 120,
     #     'disable': ['R1705', 'E9998', 'E9999', 'static_type_checker']
@@ -176,8 +220,11 @@ if __name__ == "__main__":
 
     # Note: You may modify the code below as needed; the following starter code is just a suggestion
     while game.ongoing:
-        # Note: If the loop body is getting too long, you should split the body up into helper functions
-        # for better organization. Part of your mark will be based on how well-organized your code is.
+        # Check lose condition
+        if game.moves >= game.max_moves:
+            print("GAME OVER: You have run out of time!")
+            game.ongoing = False
+            break
 
         location = game.get_location()
 
@@ -185,33 +232,71 @@ if __name__ == "__main__":
         event = Event(game.current_location_id, location.long_description)
         game_log.add_event(event, choice if choice else None)
 
+        # --- UI DISPLAY ---
+        print("\n" * 2)
+        print("=" * 60)
+        print(f" MOVES: {game.moves}/{game.max_moves}  |  SCORE: {game.score} ".center(60))
+        print("=" * 60)
+
+        # Print Location Header (REQUIRED)
+        print(f"LOCATION {location.id_num}: {location.name.upper()}")
+        print("-" * 60)
+
         #  print either full description (first time visit) or brief description (every subsequent visit) of location
-        # YOUR CODE HERE
         if not location.visited:
             print(location.long_description)
             location.visited = True
         else:
             print(location.brief_description)
+        print("-" * 60)
 
-        # Display possible actions at this location
-        print("What to do? Choose from: look, inventory, score, log, map, quit, help")
-        print("At this location, you can also:")
-        for action in location.available_commands:
-            print("-", action)
+        # Display Items
+        if location.items:
+            print(f" [!] ITEMS HERE: {', '.join(location.items)}")
+        else:
+            print(" [ ] No items visible.")
+
+        # Display possible actions
+        print("-" * 60)
+        print(" OPTIONS:")
+        print("  [System]: look, inventory, score, log, map, help, quit")
+        
+        move_cmds = [cmd for cmd in location.available_commands if cmd.startswith("go")]
+        other_cmds = [cmd for cmd in location.available_commands if not cmd.startswith("go")]
+        
+        if move_cmds:
+            print(f"  [Travel]: {', '.join(move_cmds)}")
+        if other_cmds:
+            print(f"  [Action]: {', '.join(other_cmds)}")
+        
+        if location.items:
+            print("  [Interact]: take <item>")
+        if game.inventory:
+            print("  [Interact]: drop <item>")
+        print("-" * 60)
 
         # Validate choice
-        choice = input("\nEnter action: ").lower().strip()
-        while choice not in location.available_commands and choice not in menu:
-            print("That was an invalid option; try again.")
-            choice = input("\nEnter action: ").lower().strip()
+        choice = ""
+        while not choice:
+            choice = input("\n> ").lower().strip()
+            
+            if choice in menu:
+                pass
+            elif choice in location.available_commands:
+                pass
+            elif choice.startswith("take ") or choice.startswith("drop "):
+                pass
+            else:
+                print("That was an invalid option; try again.")
+                choice = ""
 
         print("========")
         print("You decided to:", choice)
+        game.moves += 1
 
         if choice in menu:
             if choice == "log":
                 game_log.display_events()
-            # ENTER YOUR CODE BELOW to handle other menu commands (remember to use helper functions as appropriate)
             elif choice == "inventory":
                 game.display_inventory()
             elif choice == "score":
@@ -227,31 +312,92 @@ if __name__ == "__main__":
                 print("  score - Check your current score")
                 print("  log - View all events that have occurred")
                 print("  map - Display a map of visited locations")
+                print("  take [item] - Pick up an item")
+                print("  drop [item] - Drop an item")
                 print("  quit - Exit the game")
                 print("  help - Display this help message")
             elif choice == "quit":
                 print("Thank you for playing! Goodbye.")
                 game.ongoing = False
 
-        else:
-            # Handle non-menu actions
-            result = location.available_commands[choice]
+        elif choice in location.available_commands:
+            # Handle movement
+            next_location_id = location.available_commands[choice]
+            next_location = game.get_location(next_location_id)
             
-            # Check if the result is an integer (location change) or a string (item interaction)
-            if isinstance(result, int):
-                game.current_location_id = result
+            can_move = True
+            
+            # Check if location is locked
+            if next_location.locked:
+                has_key = False
+                key_name = ""
+                # Find key name for feedback
+                for item in game._items:
+                    if item.id == next_location.key_id:
+                        key_name = item.name
+                        break
+                
+                # Check player inventory for the key
+                for item in game.inventory:
+                    if item.id == next_location.key_id:
+                        has_key = True
+                        break
+                
+                if has_key:
+                    print(f"You swipe your {key_name} and the door unlocks.")
+                    next_location.locked = False # Unlock permanently
+                else:
+                    print(f"The entrance to {next_location.name} is locked.")
+                    print(f"You need a {key_name if key_name else 'key capability'} to enter.")
+                    can_move = False
+
+            if can_move:
+                game.current_location_id = next_location_id
                 print(f"You move to location {game.current_location_id}.")
-            else:
-                # Handle item interactions (e.g., taking or using an item)
-                if choice.startswith("take"):
-                    item_name = choice.replace("take ", "").strip()
-                    if item_name in location.items:
-                        print(f"You picked up the {item_name}.")
-                        location.items.remove(item_name)
+            
+        elif choice.startswith("take "):
+            item_name = choice.replace("take ", "").strip()
+            # Special case for "mug" alias or exact matches
+            items_to_check = location.items[:]
+            found = False
+            for loc_item in items_to_check:
+                if loc_item.lower() == item_name.lower() or (item_name == "mug" and loc_item == "lucky_mug") or (item_name == "usb" and loc_item == "usb_drive") or (item_name == "charger" and loc_item == "laptop_charger") or (item_name == "t-card" and loc_item == "t_card") or (item_name == "card" and loc_item == "t_card"):
+                    item_obj = game.find_item_by_name(loc_item)
+                    if item_obj and item_obj.can_take:
+                        game.add_item_to_inventory(item_obj)
+                        location.items.remove(loc_item)
+                        print(f"You picked up the {loc_item}.")
+                        found = True
+                        break
                     else:
                         print(f"You cannot take {item_name}.")
-                elif choice.startswith("use"):
-                    item_name = choice.replace("use ", "").strip()
-                    print(f"You used the {item_name}.")
-                else:
-                    print(f"You performed the action: {choice}")
+                        found = True
+                        break
+            if not found:
+                 print(f"There is no {item_name} here.")
+                
+        elif choice.startswith("drop "):
+            item_name = choice.replace("drop ", "").strip()
+            # Find item in inventory
+            item_obj = None
+            for item in game.inventory:
+                if item.name.lower() == item_name.lower() or (item_name == "mug" and item.name == "lucky_mug") or (item_name == "usb" and item.name == "usb_drive") or (item_name == "charger" and item.name == "laptop_charger") or (item_name == "t-card" and item.name == "t_card") or (item_name == "card" and item.name == "t_card"):
+                    item_obj = item
+                    break
+            
+            if item_obj:
+                game.inventory.remove(item_obj)
+                location.items.append(item_obj.name)
+                print(f"You dropped the {item_obj.name}.")
+                
+                # Check scoring
+                if location.id_num == item_obj.target_position:
+                    game.increase_score(item_obj.target_points)
+                    
+                # Check win condition
+                if game.check_win():
+                    print("CONGRATULATIONS! You have returned all missing items and saved the project!")
+                    game.ongoing = False
+            else:
+                print(f"You are not carrying {item_name}.")
+

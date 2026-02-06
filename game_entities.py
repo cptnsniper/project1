@@ -33,6 +33,8 @@ class Location:
         - available_commands: a dictionary of commands available at this location
         - items: a list of items available at this location
         - visited: whether the player has visited this location
+        - locked: whether the location is locked and requires a key to enter
+        - key_id: the ID of the item required to unlock this location (None if no key is needed)
 
     Representation Invariants:
         - id_num is a unique integer identifier
@@ -41,6 +43,7 @@ class Location:
         - available_commands is a dictionary of valid commands
         - items is a list of strings
         - visited is True or False
+        - locked is True or False
     """
 
     id_num: int
@@ -50,6 +53,8 @@ class Location:
     available_commands: dict[str, int]
     items: list[str]
     visited: bool = False
+    locked: bool = False
+    key_id: int = None
 
 
 @dataclass
@@ -61,17 +66,23 @@ class Item:
         - name: the name of the item
         - description: a description of what the item is
         - can_take: whether the player is allowed to take this item
+        - target_position: the location ID where this item should be delivered
+        - target_points: the points awarded for delivering this item
 
     Representation Invariants:
         - id is a unique string identifier
         - name is a non-empty string
         - can_take is True or False
+        - target_position is a valid location ID
+        - target_points is a non-negative integer
     """
 
     id: str
     name: str
     description: str
     can_take: bool
+    target_position: int
+    target_points: int
 
 
 # Note: Other entities you may want to add, depending on your game plan:

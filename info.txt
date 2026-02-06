@@ -1,0 +1,299 @@
+General Instructions
+
+Your programming work should be completed in the starter files provided, as well as any additional files you create. We have provided code at the bottom of each file for running PythonTA on each file. This PythonTA code is the same for all files, and our grading will run it on all Python files you submit, including any extra modules you create that were not part of the starter code.
+
+This project will be mostly hand-graded, and you have a good amount of freedom in how you write your code. Please read rest of this document to understand what you are required to include in your project and your code. Aside from those requirements, you are free to code as you see fit, including modifying the starter files and creating new files.
+
+When possible, you should stick to concepts covered so far within CSC110 and CSC111 to get the most practice of what we have learned and to be sure you understand what your code does (do not use new functions/data types from external sources, if you do not understand them!). That being said, you are allowed to use tools that are not covered in this course if you feel comfortable in your understanding/knowledge of it, including any dictionary, list, string method we did not explicitly cover. You can also import external libraries of your choice to add extra functionality (e.g. visuals, audio, etc.) to your game, if you feel comfortable doing so.
+Project Overview
+
+For this project, you are to write a small-scale text adventure game that takes place at your campus at the University of Toronto.
+
+For marking this project is structured as follows:
+
+    70% of your mark is for completing a basic set of requirements (referred to as the baseline requirements in this handout, more details below)
+    20% is for adding further enhancements of your choosing (more details below)
+    10% will be for code style and design (more details below)
+
+If you haven’t played a text adventure game before, it’s worth messing around with one to get a feel for how it works. You can play one called Adventure online, one of the first and the namesake of “adventure game”.
+Theme for Project 1
+
+    You and your friend spent the entire day yesterday finishing up your first-year CS project, and it has turned out brilliantly! You worked in various places throughout campus, moving from the library to a quiet corner in the coffee shop, and even worked on it during your lectures (instead of paying attention to your professors). The deadline is at 1pm today, and all that’s left is fixing a few PythonTA errors, and proofreading your written report, before submission. Your friend has a couple of lectures to attend today, but you assure them: “Don’t worry, I got this.” Sleep-deprived but determined, you settle down at your desk in your dorm room to power through the final fixes. You have a few hours until 1pm, so you decide to rest your eyes for a little while before you get started. Just a quick, little nap…
+
+    A while later, you wake up in a panic. You still have some time left (phew), but in your sleep-deprived state you didn’t realize that you are missing some key items (and you can’t remember where you last saw them)! Your USB drive (the only copy of your game, because of course you forgot to back it up), your laptop charger (your battery was at 5% when you sat down), and—worst of all—your lucky U of T mug. This isn’t just any mug—it’s the one that’s been with you through every late-night study session, every major deadline, and every all-nighter. You can’t possibly submit without it! The deadline is creeping closer, and your friend is counting on you. Can you track down your missing items and save your project grade (and your friendship!) before it’s too late?
+
+Project Baseline Requirements
+
+The remainder of the project is quite open-ended, but, as a baseline, you are required to implement all the functionality described in this section. Below is a summary; scroll down after the checklist to see more details about each of the listed requirements. Read through these carefully!
+Baseline Requirements Checklist
+
+As a summary, here is a checklist of baseline requirement:
+
+    Include complete documentation, and always keep in mind good coding practices (in terms of code design and style) for all your classes and functions.
+    All game data is stored within a single instance of the AdventureGame class.
+    Location, item, and any other relevant data is read from external JSON file game_data.json, and stored into the appropriate attributes within the AdventureGame instance.
+    All locations and items must be stored as instances of the Location and Item classes (the attributes and methods within these classes can be modified as per your needs).
+    Minimum required items: USB Drive, Laptop Charger, Lucky Mug
+    An EventList object should be maintained throughout the game, containing each event in the game (player action) in chronological order.
+    Required commands (these must be the exact strings used for the commands—not case-sensitive):
+        Go [direction] (where movement is one of north, south, east, west). Players are able to move in appropriate directions, based on game map.
+        Look. Each location has a description. Full description is given when the “look” command used, or when first visiting a location. Else, brief description is given.
+        Inventory. Players can pick up and drop items. Inventory command displays all items currently in inventory. Make sure only items in inventory can be used or dropped, and only items in the current location can be picked up.
+        Score. Players must have a score which can be seen using “score” command.
+        Log. This command displays a list of all the events (locations visited, commands chosen) that has taken place in the game so far, in chronological order.
+        Quit. The quit command allows player to quit the game at any time.
+    Win/Lose Conditions:
+        Player’s total number of moves is limited
+        Player can win the game
+        Player loses the game if the maximum number of moves is reached
+    Game simulations: We can run through a whole game based on a given list of commands and a game data file using the simulation.py file. This file also contains several demo runs of the game (list of commands demo-ing winning the game, losing the game, and other game functionality).
+
+Finally, you must describe each of these requirements within your written report (otherwise, no marks will be given for that piece of functionality). Details on what to include are in the Project Report section below.
+Documentation
+
+You must write complete docstrings, and if necessary, any preconditions and representation invariants for all of your classes and functions. You are welcome and encouraged to write as many helper functions as you like in order to eliminate duplicate code and make your program easier to read.
+
+For functions that take in files, or have some sort of randomness involved, you do not need to write doctest examples. Just provide a good description of what the function does within the docstring.
+AdventureGame class
+
+All your game data must be stored in one instance of the provided AdventureGame class. See starter code for details.
+Reading Data From Files
+
+You are required to implement the game by writing an “adventure engine” that uses an external text file to obtain location and item information. In other words, information about the actual locations and items in your particular game should not be hard-coded, but should instead live in data files that are read by your program. The benefit of this approach is that you can change your data files to create a new “game world”, without touching your source code.
+
+We are going to be using a JSON file format to store the game data. JSON is a human-readable file format for objects in the form of key-value pairs (similar to a Python dictionary). You can use import json and json.load() to load the file. We have provided the code to load the JSON file for you within the starter files (see the AdventureGame._load_game_data method in adventure.py). The game data JSON file will need at least two top-level keys: locations and items—but you can add other keys or modify the way these keys are organized as you see fit.
+
+You should store all important game data in external files, and try to limit how much of this data you hard-code into your Python files.
+Location and Item Information
+
+The game_data.json file should be edited to store all your game information. We have included sample location and item data (for one location, and one item) within the game_data.json file. You can remove this data (or incorporate it into your game). The format of the data can be modified as you see fit (you can add other keys, values, etc.).
+
+In our examples, we included the following attributes for the location: a numerical ID (this is required, as it will be used within your report), a name, a brief description, long description, the commands which are available at this location, and a list of items available at this location. You can change/add/remove these attributes as you see fit (except for the numerical ID attribute, which all locations must have).
+
+For the item data, we included a name, description, the starting position which is the location ID of where the item is initially located (note: you can have more than one item present at the same location), target position which is the location ID of where the item is to be deposited for credit, and target points which is the number of points received for depositing the item in that credit location. You can change/add/remove these attributes as you see fit.
+Locations
+
+Each location in the game has an associated description. Keep in mind that a location does not necessarily have to be a “room”—it could be a courtyard, a portion of a street surrounding a building, etc.
+
+Requirements for locations:
+
+    Print either a full or brief description upon each visit.
+
+    Each time a player enters a location, they must be given a description of the location (a longer description if this is the first time the player is visiting it, a brief description otherwise).
+
+    Text adventures generally display the full description of a room only once, when the room is entered the first time. Subsequent visits to the room yield only a brief description that alerts the player to where they are, without repeating scenery and other descriptive information.
+
+    Each location must have a number associated with it.
+
+    Both the full and the brief description MUST contain the location number associated with that location as a header, e.g.:
+
+    LOCATION 0
+    You are on the first floor of the Robarts Library. There are study rooms to the South, an exit from the building to St. George street to the East, and escalators going upstairs to the West.
+
+    Required Command: “Look”. The “look” command prints out the full description of the current location.
+
+    Each location must be stored as an instance of the Location class provided in the starter code.
+
+Items
+
+Some of the locations have items within them. These items can be taken by the player and carried to another location, where they can then be deposited.
+
+    Required Command: “Inventory”. This command gives a list of what the player is currently carrying.
+
+    Each item must be stored as an instance of the Item class provided in the starter code.
+
+Movement
+
+Your player must be able to move through the game world.
+
+Adventure games generally consist of an explorer moving from location to location through a set of interconnecting corridors. From the current location, the player can access other reachable locations by traveling in a designated direction: north, south, east, west. Normally, corridors can be traversed in both directions; for example, if you travel east from a foyer to reach a hallway, you can generally travel west from that hallway to go back to the foyer. However, this is not always the case, especially when adventure games involve “confusing”, “twisty” or “dark” passages.
+
+    Required Commands: “Go [direction]” where [direction] is “north”, “south”, “east”, “west”.
+
+    In your report file, include a grid of location IDs showing your entire game map. Remember that:
+        Each location is associated with a number
+        These numbers should be arranged in a grid, showing their position, each number separated by a space
+        The number “-1” is used to represent non-existent areas (which you cannot travel to)
+
+    As an example, the map data associated with the four locations in Assignment 1’s sample_locations.json would look like this:
+
+        1 2 3
+        4 -1 -1
+
+Maintaining an Event List
+
+Each event in the game, such as a player picking up an item, moving to a new location, or completing a task, must be recorded in an EventList (see suggested starter code provided in adventure.py). Events should be recorded in chronological order.
+
+Required Command: “Log”.
+
+The “log” command displays all the events that have taken place so far within the current game. This should call the display_events method from the EventList class.
+Winning/Losing the game
+
+As mentioned, the player wins the game if they are able to bring all the missing items back to their dorm room before the project deadline. In your game, you should settle on the number of moves that the player is allowed to make prior to the deadline. If they exhaust their allotted number of moves, then it is 1pm (the project is due) and the player loses.
+
+You are not required to physically time the player. They can take as long as they like to play the game. What matters is the number of moves they make, not the actual clock time that elapses while they play (Is look or inventory a “move”? That’s for you to decide!).
+Score
+
+The game should keep track of the user’s score. The scoring algorithm should include giving points for picking up and depositing the required items, as well as performing other applicable actions in the game as you see fit.
+
+Required Command: “Score”.
+
+This command gives the player’s current score. The scoring algorithm should include giving points for picking up and depositing the required items, as well as performing other applicable actions in the game as you see fit.
+Quit
+
+Required Command: “Quit”.
+
+Another required command is “Quit”, allowing the player to quit the game at any time.
+Game Simulation and Demos
+
+Like in Assignment 1, the project includes a “simulator” of the game. You should update the simulation.py file to include similar functionality as Assignment 1, as well as demo runs of your game, as described in the starter code.
+Enhancements
+
+To include enhancements in your project (worth 20% of the grade), your game must have at least one fully implemented, reasonably complex puzzle. Alternatively, you can have a simple puzzle along with a more complex non-puzzle enhancement.
+
+The functionality we have described so far—moving around, taking and dropping items—is one important facet of traditional adventure games. The other is the presence of puzzles that must be solved. Without puzzles, the game can be won simply by running around and picking up everything.
+
+For a good description of the reasoning behind puzzles, and common types of puzzles, see this article all about puzzles. Within a text adventure game specifically, some puzzles may be rather elaborate, relying on performing specialized actions on multiple items or imposing specific timing requirements. For your game, you can choose to make puzzles that are much simpler (such as finding a key in a remote location from the door that it opens), or you can experiment with something more complex. Regardless, implementing puzzles will require that you extend the commands you support and/or extend the information you store in your data files.
+
+If you wish to further increase the complexity of your game, in addition to this puzzle, you could implement any additional features you like.
+
+Here are a few suggestions:
+
+    Even more puzzles!
+    Allow the player to save their game to a file and restore it later. That way, they don’t have to complete the game in a single sitting.
+    Add more verbs (actions) that the player can perform. For example, you might provide a “read” command that gives an appropriate admonishment when used on unreadable items, but gives clues if used on a book or a piece of paper. How about an “examine” command that lets you take a closer look at a given item? An “open” or “unlock” command for drawers, cabinets, and doors? (Most of this will require adding additional fields to your data files!)
+    Give items a weight, and limit the total weight of items that the player can carry. (And why not add a puzzle that requires several items to be present at the same location, but which cannot be carried at the same time because they weigh too much?)
+    Add an “undo” command that can be used to undo the previous action the user performed. This should be able to be repeated, so users can revert back as far as they want.
+    Update game mechanics, e.g. implement a different way to handle movement commands. In the sample game data, we have included the directional commands available at each location within the location data file. Alternatively, you could change your game to use grid map data that is loaded from the game data file (you can edit the game_data.json file to add in a new “map” key), and use this to determine which directional commands are available at each location.
+    Whatever else you can think of!
+
+Enhancements Minimum Requirements
+
+As a summary of the above, here are the minimum requirements to get the full mark for enhancements.
+
+Either:
+
+    At least one “complex” puzzle (something that involves multiple steps, and possibly visiting multiple locations, to solve; implementing this should need more than minor updates to the existing game code)
+
+OR
+
+    At least one “simple” puzzle and at least one additional extra non-puzzle feature added to the game (which again should need more than minor updates to the existing game code)
+
+Lastly, the written report must describe each enhancement added.
+Style
+
+As you finalize your project, you should make sure your code is polished and ready for submission. A portion of your grade (10%) will be based on your code design and organization (part of this mark will come from PythonTA, as usual). So you should make sure to set aside considerable time after you are done implementing your game’s functionality to refactor the code to clean it up (refactoring means restructuring/reorganizing implementation code, without changing its external behaviour).
+
+There is a funny term in programming called “Code Smells”, and as the name may imply, these are things you want to avoid in your code. Below are some common “code smells” that you should look through your code for, and clean up before you submit your final game:
+
+    Magic numbers
+
+    Avoid using numbers (or other hard-coded values) without explanation. As an example, if you just write if (x == 42): it can be unclear what the number 42 represents. As an alternative, you can use variables to name these values. In Python, constant values that are used throughout a program should be named using all UPPERCASE. For example:
+
+    ANSWER_TO_LIFE = 42
+    ...
+    if (x == ANSWER_TO_LIFE):
+
+    Long Functions & Repeated Code (DRY Principle)
+
+    Follow the Don’t Repeat Yourself (DRY) principle. Look for opportunities to:
+        Organize repeated data into suitable data structures (e.g., a new dataclass)
+        Organize repeated logic into a helper function
+
+    Multi-Purpose Functions
+
+    Each function should do only one thing. To check this, ask yourself:
+        Is the docstring description for the function in simple and plain English, and easy to understand?
+        Is the function doing multiple things that could be broken up into multiple functions?
+
+    Inconsistent or Non-meaningful Naming
+
+    Your variable/class/function names should follow consistent Python naming conventions, and be meaningful/descriptive in some way. Do not simply name all your variables single-letter names such as “x”, “y”, “z” (unless it really makes sense to do so).
+
+    Long Parameter List
+
+    You should avoid having too many parameters for a function. If you constantly have to pass in a lot of data to a function, considering grouping those data into a dataclass and passing that object in instead, or splitting up the work between helper functions.
+
+    Dead Code, Commented-out Code, Debugging Statements, etc.
+
+    Be sure to remove unnecessary comments, extra print() statements that may have been used for debugging, any “TODO” comments or instructions/hints that we provided, etc. (Note: one exception where you will be allowed to leave in “commented-out” code is to get partial marks for buggy code as mentioned here.)
+
+Lastly, as always, make sure to fix ALL PythonTA errors. Part of your grade will depend on this.
+Project Report
+
+IMPORTANT: Without a project report, you will receive a 0 on the entire project automatically! You must complete and submit a written project report to get any marks for this project.
+
+We have provided a report.tex file for you within the starter zip to use as a template. More details about the required sections for your project report are as below (keep all descriptions relatively brief):
+
+    How to run your game.
+
+    For most of you, this should simply be “Run adventure.py”. If you have any extra steps to take (e.g. libraries to install, for your enhancements to work), clearly indicate this at the beginning of your report.
+
+    Grid of location IDs showing your game map.
+
+    You should also mention which ID is the initial location. For example, if the entire plot of your game takes place in a T-shaped building, you can represent this in your report’s “Game map” section like so:
+
+        1 2 3
+        -1 4 -1
+        -1 5 -1
+
+        Starting location: 1
+
+    Here, the only accessible locations are 1, 2, 3, 4, 5. The “-1” are empty areas. So, from location 1, the player is allowed to travel only east. From location 2, the player is allowed to travel either west, east, or south. From location 5, the player is allowed to travel only north. And so on.
+
+    Game solution.
+
+    Include a list of all the commands the player must do (in chronological order) to win the game. You can copy the list you assigned to win_walkthrough in the simulation.py file into this section of the report.
+
+    Your TA will follow these commands exactly as you type them in the report, so watch out for typos or missing commands.
+
+    Lose condition(s).
+
+    Describe what would cause the player to lose your game. If there are multiple ways to lose your game, describe all of them here. Include a list of all the commands the player could do (in chronological order) to lose the game. You can copy the list you assigned to lose_demo in the simulation.py file into this section of the report.
+
+    For each lose condition, clearly include which parts of your code are involved in this functionality. For example, if my lose condition was dependent on number of moves made so far, I should state specifically which file (e.g. game_entities.py or adventure.py) and which class/function/method (e.g. Event, AdventureGame, etc.) gets updated to keep track of the moves, and which checks whether or not the lose condition has been reached.
+
+    Inventory.
+
+    Include a list of all location IDs that involves items in the game. For each item, mention both their start location (where the item is found) and target location (where the item can be used).
+
+    For at least one example item, include the exact list of command(s) that should be used to get to and pick up the item(s) and the command(s) used to use/drop the item. You can copy the list you assigned to inventory_demo in the simulation.py file into this section of the report.
+
+    Finally, describe which parts of your code (file, class, function/method) are involved in handling the “inventory” command.
+
+    Score.
+
+    Briefly describe the way players can earn scores in your game. Include the first location in which they can increase their score, and the exact list of command(s) leading up to the score increase. You can copy the list you assigned to scores_demo in the simulation.py file into this section of the report.
+
+    Finally, describe which parts of your code (file, class, function/method) are involved in handling the “score” functionality.
+
+    Enhancements.
+
+    For each enhancement you added, include:
+        Brief description of what the enhancement is (if it’s a puzzle, also describe what steps the player must take to solve it)
+        Complexity level (choose from low/medium/high)
+        Reasons you believe this is the complexity level (e.g. mention implementation details, how much code did you have to add/change from the baseline, what challenges did you face, etc.)
+        Name the parts of the code (i.e. the Python file, class, method, etc.) which are involved in its functionality.
+        Copy the list you assigned to enhancements_demo in the simulation.py file into this section of the report.
+
+For each of the sections above, failing to include the section in your written report will lead to an automatic mark of 0 for the associated game feature.
+Does Your Game Run?
+
+IMPORTANT: If your game does not run, you may receive a 0 on the entire project automatically! Read through this section carefully, and double check your submitted files.
+
+Please make sure your game actually runs. That is, we should be able to run adventure.py (or however else you run your game), simply using Python 3.13.5. If you have any extra libraries or anything that needs to be installed to run your game, you must mention it within the report.
+Partial Marks for Buggy Code
+
+If you have some incomplete code that you worked very hard on, but it doesn’t quite work, comment this out, and mention your efforts within the written report, under the associated section. This way, a TA can still look at your incomplete code and grant partial marks if it seems justified, but the buggy code will not cause other parts of your game (which do work) to crash!
+Tip for Double-Checking Your Game Runs
+
+To avoid getting an automatic 0 on your game due to bugs, double (maybe even triple!) check your submission by doing the following on a “fresh” computer (that you have not worked on your project on before), such as the Bahen lab computers or the computer of your friend who is NOT in CSC111. You do not want your friend to accidentally (or intentionally) submit your project as their own—this has happened many times before (yes, purely accidentally as well) so just don’t send your CSC111 non-group-member friends your code, to be safe!
+
+    Firstly, make sure the fresh computer has Python 3.13.5 and PyCharm installed on it (the same way as specified in the CSC111 Software Installation instructions).
+
+    Download all of the files you submitted to MarkUs onto the computer, in a new folder.
+
+    If applicable, follow any additional installation instructions you wrote in your project report.
+
+    Run your game in PyCharm. It should “just work”—if you run into any errors, fix them and (if necessary) update your report’s instructions so that your TA doesn’t run into problems!!
+

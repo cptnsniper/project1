@@ -2,187 +2,103 @@
   "locations": [
     {
       "id": 1,
-      "name": "Main Deck",
-      "brief_description": "You are on the main deck of a large cargo ship. The deck is eerily quiet. Ropes and cargo containers are scattered around. You can go below deck to the South, to the bridge North, or to the port side West.",
-      "long_description": "You wake up on the main deck of a large cargo ship with no memory of how you got here. The sun is setting, casting long shadows across the weathered wooden planks. The ship rocks gently on the waves. There's an unsettling silence—no crew members anywhere. You notice claw marks gouged into the metal railings. Dark stains stain the deck near the cargo containers. You can go below deck to the South, climb to the bridge North, or explore the port side West.",
+      "name": "Dorm Room",
+      "brief_description": "You are back in your dorm room. Your desk is cluttered with papers. You can go to the Hallway North.",
+      "long_description": "You are in your dorm room. It's a mess of textbooks and empty coffee cups. Your laptop sits on the desk, battery draining. This is where you need to return your missing items to finish your project. The deadline is looming! You can leave to the Hallway North.",
       "available_commands": {
-        "go south": 2,
-        "go north": 3,
-        "go west": 4
+        "go north": 2
       },
-      "items": ["captain_log"]
+      "items": ["t_card"]
     },
     {
       "id": 2,
-      "name": "Cargo Hold",
-      "brief_description": "You are in the dark cargo hold below deck. Large metal containers are stacked high. You can return to the main deck North, or explore deeper into the hold East.",
-      "long_description": "You descend into the cargo hold. It's dimly lit by a few flickering emergency lights. The air is thick and humid. Massive metal shipping containers are stacked precariously. Several containers have been torn open, their contents scattered across the floor. You see more massive claw marks on the container walls—whatever caused them was enormous. You can return to the main deck North or explore deeper East.",
+      "name": "Hallway",
+      "brief_description": "You are in the residence hallway. It's quiet. You can return to your Dorm South, or head outside to University College East.",
+      "long_description": "You stand in the long, quiet hallway of your residence building. You see a few other students rushing to class. To the South is your Dorm Room. To the East, the exit leads out to University College.",
       "available_commands": {
-        "go north": 1,
-        "go east": 5
+        "go south": 1,
+        "go east": 3
       },
-      "items": ["crew_manifest"]
+      "items": []
     },
     {
       "id": 3,
-      "name": "Bridge",
-      "brief_description": "You are on the ship's bridge. Navigation equipment and controls are everywhere. The captain's chair sits empty. You can descend back to the main deck South or enter the Captain's Cabin to the East.",
-      "long_description": "You climb to the bridge of the ship. Navigation screens flicker with warnings. Charts are scattered across the control panels. The captain's leather chair sits abandoned. Through the window, you can see the ocean stretching endlessly. The radio is emitting static. You notice deep gouges in the metal walls here too. To the East is the Captain's Cabin—your way to send a distress signal. You can descend back to the main deck South.",
+      "name": "University College",
+      "brief_description": "You are at University College. Historical buildings surround the green. You can go West to the Hallway, North to Robarts Library, or South to the Bahen Centre.",
+      "long_description": "You stand in the quad of University College. The historic stone building looms over you. Students are relaxing on the grass. To the West is your Residence Hallway. To the North is the massive concrete turkey, Robarts Library. To the South is the Bahen Centre for Information Technology.",
       "available_commands": {
-        "go south": 1,
-        "go east": 6
+        "go west": 2,
+        "go north": 4,
+        "go south": 5
       },
-      "items": ["radio_key"]
+      "items": []
     },
     {
       "id": 4,
-      "name": "Port Side",
-      "brief_description": "You are on the port side of the ship. The railings are damaged. You can see something glinting in the water below. You can return to the main deck East or climb up to the crow's nest North.",
-      "long_description": "You walk along the port side of the ship. The railings are twisted and broken in several places. Looking down, you can see the dark water below and something large moving beneath the surface. There are deep gouges in the hull as if something massive clawed at the ship. You can return to the main deck East or climb up to the crow's nest North using the ladder.",
+      "name": "Robarts Library",
+      "brief_description": "You are in Robarts Library. It's silent. You can return South to University College or go East to the CSC111 Lecture Room.",
+      "long_description": "You enter Robarts Library. The silence is heavy, and the brutalist architecture is imposing. You remember working at a table near the back. The exit to University College is South. A connecting corridor leads East to the CSC111 Lecture Room.",
       "available_commands": {
-        "go east": 1,
-        "go north": 7
+        "go south": 3,
+        "go east": 6
       },
-      "items": ["torn_flag"]
+      "items": ["usb_drive"],
+      "locked": true,
+      "key_id": 4
     },
     {
       "id": 5,
-      "name": "Deep Hold",
-      "brief_description": "You are deep in the cargo hold. It's very dark. You can hear water dripping. You can return West to the main cargo hold.",
-      "long_description": "You venture deeper into the cargo hold. It's pitch black except for your ability to see. Water drips from above. The air smells of salt and something rotten. You see a massive hole in the hull—the ship is taking on water slowly. This must have been where the creature broke through. You can return West to the main cargo hold. A terrible feeling washes over you as you hear a distant, otherworldly sound echoing through the hold.",
+      "name": "Bahen Centre",
+      "brief_description": "You are in the Bahen Centre atrium. It's buzzing with CS students. You can return North to University College.",
+      "long_description": "You walk into the Bahen Centre. It's bright and modern, buzzing with students coding on their specific CS assignments. You see the corner table where you and your friend were working yesterday. You can return North to University College.",
       "available_commands": {
-        "go west": 2,
-        "go up": 1
+        "go north": 3
       },
-      "items": ["water_sample"]
+      "items": ["laptop_charger"]
     },
     {
       "id": 6,
-      "name": "Captain's Cabin",
-      "brief_description": "You are in the Captain's Cabin. A large desk dominates the room. Navigation charts cover the walls. You can return to the Bridge West.",
-      "long_description": "You enter the Captain's Cabin. It's well-furnished with nautical decorations. The captain's desk is covered with charts and a ship's log. A radio system sits on a side table—this is how you can call for help. You notice a recent entry in the log describing strange sonar readings. On the desk is a mysterious key. The walls here are also scarred with claw marks, but less severe than elsewhere. You can return to the Bridge West.",
+      "name": "CSC111 Lecture Room",
+      "brief_description": "You are in the CSC111 Lecture Room. It's empty. You can return West to Robarts Library.",
+      "long_description": "You stand in the CSC111 Lecture Room. The rows of seats are empty between classes. You check under the seat where you sat during the last lecture. The exit West takes you back to Robarts Library.",
       "available_commands": {
-        "go west": 3,
-        "send signal": 11
+        "go west": 4
       },
-      "items": ["safe_key"]
-    },
-    {
-      "id": 7,
-      "name": "Crow's Nest",
-      "brief_description": "You are high up in the crow's nest. You can see the entire ocean around you. You can climb back down South.",
-      "long_description": "You climb high into the crow's nest at the top of the ship's mast. From here, you can see for miles across the ocean in all directions. The view is magnificent but terrifying—you're completely exposed. In the distance, you see something massive moving through the water, creating waves as it travels. Its silhouette is enormous and vaguely serpentine. You realize what attacked the ship. The creature seems to be circling. You can climb back down South, but you feel watched from the water below.",
-      "available_commands": {
-        "go south": 4,
-        "descend quickly": 8
-      },
-      "items": ["spyglass"]
-    },
-    {
-      "id": 8,
-      "name": "Rigging Section",
-      "brief_description": "You are in the ship's rigging. Ropes and pulleys surround you. You can go down to the Port Side South or continue to the emergency raft West.",
-      "long_description": "You descend from the crow's nest into the rigging section. The ropes creak and sway in the wind. Suddenly, you feel the entire ship shudder violently. A massive shape rises from the water on the port side—the sea monster! Its tentacle-like appendages reach toward the ship. You must act quickly. You can try to reach the emergency raft West or descend to the Port Side South.",
-      "available_commands": {
-        "go south": 4,
-        "go west": 9
-      },
-      "items": ["rope"]
-    },
-    {
-      "id": 9,
-      "name": "Emergency Raft",
-      "brief_description": "You are at the emergency raft. It's partially lowered. You can attempt to escape West or return to the ship East.",
-      "long_description": "You reach the emergency raft attached to the side of the ship. It's small but functional. The raft is partially lowered, ready to deploy. The water below churns as the sea monster thrashes nearby. You have mere seconds. You can attempt to lower the raft and escape West into the ocean, or return to the ship East to try another route.",
-      "available_commands": {
-        "go west": 10,
-        "go east": 8
-      },
-      "items": ["flare_gun"]
-    },
-    {
-      "id": 10,
-      "name": "Open Ocean - Safe Escape",
-      "brief_description": "You are drifting safely in the emergency raft, away from the monster. Help is on the way.",
-      "long_description": "You successfully lower the raft and drift away from the doomed ship. The emergency beacon is transmitting your location. In the distance, you see the sea monster circling the ship, but it's no longer interested in your small raft. A rescue ship appears on the horizon. You're safe. As you wait for rescue, you reflect on the impossible creature you encountered. The truth about what attacked the ship will be a mystery for marine biologists to solve.",
-      "available_commands": {
-        "wait for rescue": 10
-      },
-      "items": []
-    },
-    {
-      "id": 11,
-      "name": "Captain's Cabin - Signal Sent",
-      "brief_description": "You sent a distress signal! A rescue ship is on the way. You are safe in the Captain's Cabin.",
-      "long_description": "You successfully send a distress signal from the Captain's Cabin. The radio crackles to life as the nearest coast guard station acknowledges your message. They confirm a rescue ship is en route and will reach you in approximately 4 hours. You are safe. As you wait, you document everything you've learned about the attack. The captain's log entries, the physical evidence, and your observations will help scientists understand this unprecedented encounter with a sea monster.",
-      "available_commands": {
-        "wait for rescue": 11
-      },
-      "items": []
-    },
-    {
-      "id": 12,
-      "name": "Monster Attack - Game Over",
-      "brief_description": "The creature catches you. Game Over.",
-      "long_description": "You didn't escape in time. The sea monster's massive tentacle wraps around you. This is the end. At least now, the mystery of the ship's fate is solved. Your body is never recovered, but the ship's wreckage eventually washes ashore, providing evidence of the creature's existence.",
-      "available_commands": {},
-      "items": []
+      "items": ["lucky_mug"]
     }
   ],
   "items": [
     {
       "id": 1,
-      "name": "captain_log",
-      "description": "The ship's captain's log. Recent entries mention strange sonar readings and unusual animal activity.",
-      "can_take": true
+      "name": "usb_drive",
+      "description": "Your USB drive containing the only backup of your project. Crucial!",
+      "can_take": true,
+      "target_position": 1,
+      "target_points": 50
     },
     {
       "id": 2,
-      "name": "crew_manifest",
-      "description": "A manifest listing all crew members. All 47 crew members are accounted for... but where are they?",
-      "can_take": true
+      "name": "laptop_charger",
+      "description": "Your laptop charger. You won't be able to submit your project without power!",
+      "can_take": true,
+      "target_position": 1,
+      "target_points": 30
     },
     {
       "id": 3,
-      "name": "radio_key",
-      "description": "A small brass key for activating the bridge's emergency radio system.",
-      "can_take": true
+      "name": "lucky_mug",
+      "description": "Your lucky UofT mug. It has seen you through every deadline. You can't submit without it.",
+      "can_take": true,
+      "target_position": 1,
+      "target_points": 20
     },
     {
       "id": 4,
-      "name": "torn_flag",
-      "description": "The ship's flag, torn and tattered with what looks like claw marks through it.",
-      "can_take": true
-    },
-    {
-      "id": 5,
-      "name": "water_sample",
-      "description": "A vial of murky water from the cargo hold. It has an unusual phosphorescent glow.",
-      "can_take": true
-    },
-    {
-      "id": 6,
-      "name": "safe_key",
-      "description": "An ornate key found on the Captain's desk. It likely opens the captain's safe.",
-      "can_take": true
-    },
-    {
-      "id": 7,
-      "name": "spyglass",
-      "description": "A brass telescope used for spotting objects at sea. Through it, you saw the sea monster.",
-      "can_take": true
-    },
-    {
-      "id": 8,
-      "name": "rope",
-      "description": "A length of sturdy nautical rope. Could be useful for securing things or climbing.",
-      "can_take": true
-    },
-    {
-      "id": 9,
-      "name": "flare_gun",
-      "description": "An emergency flare gun with three flares remaining. Could signal for help.",
-      "can_take": true
+      "name": "t_card",
+      "description": "Your Student T-Card. You need this to access library buildings.",
+      "can_take": true,
+      "target_position": 1,
+      "target_points": 0
     }
   ]
 }
