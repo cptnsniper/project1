@@ -189,6 +189,51 @@ score
     \end{itemize}
 \end{enumerate}
 
+\section*{General Menu Commands}
+The game supports the following general commands that can be used at any location:
+
+\begin{enumerate}
+    \item \texttt{help} - Displays a list of all available commands and their descriptions
+    
+    \item \texttt{look} or \texttt{l} - Shows the detailed description of the current location, including available exits and items
+    
+    \item \texttt{inventory} or \texttt{i} - Displays all items currently in the player's inventory
+    
+    \item \texttt{score} - Shows the player's current score and number of items returned
+    
+    \item \texttt{map} - Displays a map of all visited locations and their connections. The current location is marked with "YOU ARE HERE"
+    
+    \item \texttt{examine [item]} or \texttt{x [item]} - Shows detailed information about a specific item in the current location or inventory
+    
+    \item \texttt{quit} - Exits the game (with confirmation prompt)
+\end{enumerate}
+
+\subsection*{Movement Commands}
+Players can move between locations using directional commands:
+\begin{itemize}
+    \item \texttt{go north} or \texttt{n} - Move north
+    \item \texttt{go south} or \texttt{s} - Move south
+    \item \texttt{go east} or \texttt{e} - Move east
+    \item \texttt{go west} or \texttt{w} - Move west
+    \item \texttt{go up} or \texttt{u} - Move up
+    \item \texttt{go down} or \texttt{d} - Move down
+\end{itemize}
+
+\subsection*{Item Commands}
+\begin{itemize}
+    \item \texttt{take [item]} - Pick up an item from the current location
+    \item \texttt{take} - If only one item is present, automatically picks it up
+    \item \texttt{drop [item]} - Drop an item from inventory at the current location
+\end{itemize}
+
+\subsection*{Code Implementation}
+These commands are handled in \texttt{adventure.py}:
+\begin{itemize}
+    \item Lines 241-251: Command aliases dictionary mapping shortcuts to full commands
+    \item Lines 404-416: Alias expansion in input handling
+    \item Lines 417-608: Main command processing logic in the game loop
+\end{itemize}
+
 \section*{Enhancements}
 \begin{enumerate}
     \item Enhanced User Interface System
@@ -383,6 +428,5 @@ take
         \item Enhancement demo: Type 'quit' then 'no' to see confirmation
     \end{itemize}
 \end{enumerate}
-
 
 \end{document}
